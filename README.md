@@ -1,7 +1,7 @@
 ## MASTER Thomas & Daniel
 # Links
 
-- [Overleaf](https://www.overleaf.com/project/655745a23434eb9e535598a0)
+- [Overleaf]([https://www.overleaf.com/project/655745a23434eb9e535598a0](https://www.overleaf.com/project)
 - [Github Frontend](https://github.com/danielnyvoll/masterfrontend)
 - [Github Backend](https://github.com/danielnyvoll/masterbackend)
 - [Clickup](https://app.clickup.com/9015145647/home)
