@@ -1,11 +1,16 @@
-import './App.css';
+import { Canvas } from "@react-three/fiber";
+import { Experience } from "./components/Experience";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-      </header>
-    </div>
+    <Canvas
+      style={{position: "fixed"}}
+      shadows
+      camera={{ position: [3, 3, 3], fov: 30 } }
+      >
+        <color attach="background" args={["#ececec"]} />
+        <Experience />
+    </Canvas>
   );
 }
 
