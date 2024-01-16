@@ -15,13 +15,12 @@ export const Controls = {
 function App() {
 
   const map = useMemo(() => [
-    {
-      name: Controls.forward, keys: ["ArrowUp", "KeyW"],
-      name: Controls.back, keys: ["ArrowDown", "KeyS"],
-      name: Controls.left, keys: ["ArrowLeft", "KeyA"],
-      name: Controls.right, keys: ["ArrowRight", "KeyD"],
-      name: Controls.jump, keys: ["Space"],
-    }],
+      { name: Controls.forward, keys: ["ArrowUp", "KeyW"] },
+      { name: Controls.back, keys: ["ArrowDown", "KeyS"] },
+      { name: Controls.left, keys: ["ArrowLeft", "KeyA"] },
+      { name: Controls.right, keys: ["ArrowRight", "KeyD"] },
+      {name: Controls.jump, keys: ["Space"] }
+    ],
     []
   );
 
@@ -30,7 +29,7 @@ function App() {
       <Canvas
         style={{position: "fixed"}}
         shadows
-        camera={{ position: [10, 10, 10], fov: 30 } }
+        camera={{ position: [30, 30, 30], fov: 30 } }
         >
           <color attach="background" args={["#ececec"]} />
           <Suspense>
