@@ -59,7 +59,12 @@ export const Experience = () => {
             <directionalLight position={[-10, 10, 0]} intensity={0.4} />
             <OrbitControls />
             
-            <RigidBody position={[0, 5, 0]} colliders={"ball"} name="ball" ref={ball}
+            <RigidBody
+            position={[0, 5, 0]} 
+            colliders={"ball"} 
+            name="ball" 
+            ref={ball}
+            restitution={2}
             onCollisionEnter={({other}) => {
                 if(other.rigidBodyObject.name === "player") {
                     kick();
@@ -103,17 +108,17 @@ export const Experience = () => {
             </RigidBody>
 
             <RigidBody type="fixed">
-            <Box position={[15.5, 1, 0]} args={[1, 1, 20]}>
-                    <meshStandardMaterial color="springgreen" />
+                <Box position={[15.5, 2, 0]} args={[1, 5, 20]}>
+                    <meshStandardMaterial visible={false} />
                 </Box>
-                <Box position={[-15.5, 1, 0]} args={[1, 1, 20]}>
-                    <meshStandardMaterial color="springgreen" />
+                <Box position={[-15.5, 2, 0]} args={[1, 5, 20]}>
+                    <meshStandardMaterial visible={false} />
                 </Box>
-                <Box position={[0, 1, 10.5]} args={[32, 1, 1]}>
-                    <meshStandardMaterial color="springgreen" />
+                <Box position={[0, 2, 10.5]} args={[32, 5, 1]}>
+                    <meshStandardMaterial visible={false} />
                 </Box>
-                <Box position={[0, 1, -10.5]} args={[32, 1, 1]}>
-                    <meshStandardMaterial color="springgreen" />
+                <Box position={[0, 2, -10.5]} args={[32, 5, 1]}>
+                    <meshStandardMaterial visible={false} />
                 </Box>
             </RigidBody>
         </>
