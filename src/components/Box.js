@@ -1,24 +1,51 @@
-// Box.js
-import React, { useState } from 'react';
-import { MeshWobbleMaterial } from '@react-three/drei';
-import { useSpring, animated } from '@react-spring/three';
+import React, { useEffect, useState } from 'react';
+import { RigidBody, CuboidCollider } from '@react-three/rapier';
+import { animated } from '@react-spring/three';
 
-const Box = ({ position, color = "royalblue" }) => {
-  const [hovered, setHovered] = useState(false);
-  const props = useSpring({
-    scale: hovered ? [1.2, 1.2, 1.2] : [1, 1, 1], // Increase scale when hovered
-  });
+const Box = ({ position, color = "royalblue", moveStep = 1 }) => {
+
+  // Initialize position state
+  const [boxPosition, setBoxPosition] = useState(position);
+
+  // Add event listeners for arrow keys
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+        switch (event.key) {
+          case 'ArrowUp':
+            setBoxPosition([boxPosition[0], boxPosition[1] + moveStep, boxPosition[2]]);
+            break;
+          case 'ArrowDown':
+            setBoxPosition([boxPosition[0], boxPosition[1] - moveStep, boxPosition[2]]);
+            break;
+          case 'ArrowLeft':
+            setBoxPosition([boxPosition[0] - moveStep, boxPosition[1], boxPosition[2]]);
+            break;
+          case 'ArrowRight':
+            setBoxPosition([boxPosition[0] + moveStep, boxPosition[1], boxPosition[2]]);
+            break;
+          default:
+            break;
+        }
+      };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [boxPosition]);
 
   return (
-    <animated.mesh 
-      position={position} 
-      scale={props.scale}
-      onPointerOver={() => setHovered(true)} 
-      onPointerOut={() => setHovered(false)}
-    >
-      <boxGeometry args={[1, 1, 1]} />
-      <MeshWobbleMaterial color={color} factor={0.6} speed={1} />
-    </animated.mesh>
+    <RigidBody type="dynamic" position={boxPosition}>
+      <CuboidCollider args={[1, 1, 1]} />
+      <animated.mesh 
+        position={boxPosition} 
+        scale={[1, 1, 1]} // Adjust the scale as needed
+      >
+        <boxGeometry args={[1, 1, 1]} />
+        <meshStandardMaterial color={color} />
+      </animated.mesh>
+    </RigidBody>
   );
 };
 

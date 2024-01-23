@@ -1,11 +1,11 @@
- import './App.css';
- import Scene from './components/Scene'; 
+import './App.css';
+import LiveSimulation from './components/SimulationData';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-      <Scene />
+      <LiveSimulation/>
       </header>
     </div>
   );
