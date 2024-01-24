@@ -1,13 +1,24 @@
 import './App.css';
-import LiveSimulation from './components/SimulationData';
+import { Canvas } from "@react-three/fiber";
+import { Experience } from "./components/Experience";
+import { Physics } from "@react-three/rapier";
+import { Suspense, useMemo } from "react";
 
 function App() {
+
   return (
-    <div className="App">
-      <header className="App-header">
-      <LiveSimulation/>
-      </header>
-    </div>
+    <Canvas
+      style={{position: "fixed"}}
+      shadows
+      camera={{ position: [30, 30, 30], fov: 30 } }
+      >
+        <color attach="background" args={["#ececec"]} />
+        <Suspense>
+          <Physics debug>
+            <Experience />
+          </Physics>
+        </Suspense>
+    </Canvas>
   );
 }
 

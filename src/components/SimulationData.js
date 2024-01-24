@@ -3,36 +3,32 @@ import io from 'socket.io-client';
 
 const SERVER_URL = 'http://localhost:5000'; // Adjust this URL to your server's address
 
-function LiveSimulation() {
-  const [simulationData, setSimulationData] = useState({});
+const LiveSimulation = () => {
+  const socket = io(SERVER_URL);
 
-  useEffect(() => {
-    const socket = io(SERVER_URL);
-
+  const start = (onDataReceived) => {
     socket.on('connect', () => {
       console.log('Connected to server');
     });
 
     socket.on('simulation_data', data => {
       console.log('Simulation data received:', data);
-      setSimulationData(data);
+      onDataReceived(data);
     });
 
     socket.on('disconnect', () => {
       console.log('Disconnected from server');
     });
+  };
 
-    return () => {
-      socket.disconnect();
-    };
-  }, []);
+  const disconnect = () => {
+    socket.disconnect();
+  };
 
-  return (
-    <div>
-      <h2>Live Simulation Data</h2>
-      <pre>{JSON.stringify(simulationData, null, 2)}</pre>
-    </div>
-  );
-}
+  return {
+    start,
+    disconnect,
+  };
+};
 
 export default LiveSimulation;
