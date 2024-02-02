@@ -11,7 +11,7 @@ const Stadium = () => {
   const scale = [76, 1, 36];
   const { scene } = useGLTF('./football-field-for-gtec/source/untitled.gltf');
 
-  return <primitive object={scene} scale={[1, 1, 1]} />; // Adjust scale as needed
+  return <primitive object={scene} scale={[1, 1, 1]} />;
 };
 
 const Ball = () => {
@@ -28,9 +28,9 @@ const Ball = () => {
 const Scene = () => {
   return (
     <Canvas style={{
-      width: '100vw',   // 100% of the viewport width
-      height: '100vh',  // 100% of the viewport height
-      position: 'fixed', // Fix it to cover the entire screen
+      width: '100vw',   
+      height: '100vh',  
+      position: 'fixed', 
       top: 0,
       left: 0
     }}>
