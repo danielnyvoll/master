@@ -8,11 +8,10 @@ const Player = ({ onCollisionEnter, onCollisionExit, command }) => {
     const playerRef = useRef();
     console.log(command); 
     let max_speed = 7.5;
-    let acceleration = 0.5;
+   // let acceleration = 0.5;
 
     let impulse = vec3({ x: 0, y: 0, z: 0 });
         
-    // Define the executeCommand function
     const executeCommand = (command) => {
         
         let directions = { forward: false, backward: false, left: false, right: false };
@@ -30,7 +29,6 @@ const Player = ({ onCollisionEnter, onCollisionExit, command }) => {
             case "right":
                 directions.right = true;
                 break;
-            // Add more cases if needed
         }
        
         console.log(directions);
