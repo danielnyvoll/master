@@ -1,6 +1,5 @@
 import { vec3 } from '@react-three/rapier';
 
-// Function to calculate the impulse to apply to the ball when kicked
 export const calculateKickImpulse = (kickerRef, ballRef, kickStrength = 2.0) => {
     if (!kickerRef.current || !ballRef.current) {
         return { x: 0, y: 0, z: 0 };
@@ -13,8 +12,7 @@ export const calculateKickImpulse = (kickerRef, ballRef, kickStrength = 2.0) => 
     return direction;
 };
 
-// Function to calculate the movement impulse for the player
-export const calculateMovementImpulse = (directions, acceleration = 0.5, maxSpeed = 7.5, playerRef) => {
+export const calculateMovementImpulse = (directions, acceleration = 2.5, maxSpeed = 17.5, playerRef) => {
     if (!playerRef.current) {
         return { x: 0, y: 0, z: 0 };
     }
