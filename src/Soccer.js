@@ -42,7 +42,7 @@ const Soccer = () => {
             <directionalLight position={[-10, 10, 0]} intensity={0.4} />
             <OrbitControls />
             <Suspense>
-            <Physics>
+            <Physics debug>
                 <Player 
                     onCollisionEnter={handlePlayerCollisionEnter} 
                     onCollisionExit={handlePlayerCollisionExit}

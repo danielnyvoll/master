@@ -14,24 +14,25 @@ const Field = () => {
 
     return (
         <>
-             <RigidBody type="fixed" name="floor" friction={1.2}>
-                {/* Field */}
+            {/* Field */}
+            <RigidBody type="fixed" name="floor" friction={1.2}>
+
                 <Box position={[0, 0, 0]} args={[fieldLength, 1, fieldWidth]}>
                     <meshStandardMaterial color="springgreen" />
                 </Box>
-
-                {/* Field Lines - Sidelines and Half-line */}
-                <Box position={[0, 0.5, fieldWidth / 2]} args={[fieldLength, 0.1, 0.2]}><meshStandardMaterial color="white" /></Box>
-                <Box position={[0, 0.5, -fieldWidth / 2]} args={[fieldLength, 0.1, 0.2]}><meshStandardMaterial color="white" /></Box>
-                <Box position={[fieldLength / 2, 0.5, 0]} args={[0.2, 0.1, fieldWidth]}><meshStandardMaterial color="white" /></Box>
-                <Box position={[-fieldLength / 2, 0.5, 0]} args={[0.2, 0.1, fieldWidth]}><meshStandardMaterial color="white" /></Box>
-                <Box position={[0, 0.5, 0]} args={[0.2, 0.1, fieldWidth]}><meshStandardMaterial color="white" /></Box>
-
-                {/* Center Circle */}
-                <Torus position={[0, 0.5, 0]} args={[centerCircleRadius, 0.1, 16, 100]} rotation={[Math.PI / 2, 0, 0]}>
-                    <meshStandardMaterial color="white" />
-                </Torus>
             </RigidBody>
+
+            {/* Field Lines - Sidelines and Half-line */}
+            <Box position={[0, 0.5, fieldWidth / 2]} args={[fieldLength, 0.1, 0.2]}><meshStandardMaterial color="white" /></Box>
+            <Box position={[0, 0.5, -fieldWidth / 2]} args={[fieldLength, 0.1, 0.2]}><meshStandardMaterial color="white" /></Box>
+            <Box position={[fieldLength / 2, 0.5, 0]} args={[0.2, 0.1, fieldWidth]}><meshStandardMaterial color="white" /></Box>
+            <Box position={[-fieldLength / 2, 0.5, 0]} args={[0.2, 0.1, fieldWidth]}><meshStandardMaterial color="white" /></Box>
+            <Box position={[0, 0.5, 0]} args={[0.2, 0.1, fieldWidth]}><meshStandardMaterial color="white" /></Box>
+
+            {/* Center Circle */}
+            <Torus position={[0, 0.5, 0]} args={[centerCircleRadius, 0.1, 16, 100]} rotation={[Math.PI / 2, 0, 0]}>
+                <meshStandardMaterial color="white" />
+            </Torus>
 
             {/* Walls */}
             <RigidBody type="fixed">
