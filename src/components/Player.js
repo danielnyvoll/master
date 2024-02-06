@@ -1,7 +1,7 @@
 import { RigidBody } from "@react-three/rapier";
 import { Box } from "@react-three/drei";
 import { calculateMovementImpulse } from '../utils/physics';
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { useFrame } from "@react-three/fiber";
 
 
@@ -29,7 +29,6 @@ const Player = ({ onCollisionEnter, onCollisionExit, command }) => {
                 // Handle unexpected commands (e.g., log an error message)
                 console.error(`Unexpected command: ${cmd}`);
                 return;
-                break;
             // Add more cases if needed
         }
 
