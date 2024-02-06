@@ -1,9 +1,9 @@
 import React from 'react';
-import Soccer from './Soccer';
+import TrainingScreen from './screens/TrainingScreen';
 
 function App() {
     return (
-            <Soccer />
+            <TrainingScreen />
     );
 }
 

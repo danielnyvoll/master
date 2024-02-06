@@ -30,13 +30,7 @@ const Soccer = () => {
             <form onSubmit={handleCommandSubmit} style={{ position: 'absolute', zIndex: 1 }}>
                 <input type="text" value={command} onChange={handleCommandChange} placeholder="Enter command" />
             </form>
-        <Canvas style={{
-            width: '100vw',
-            height: '100vh',
-            position: 'absolute',
-            top: 0,
-            left: 0
-        }}
+        <Canvas 
     >
             <ambientLight intensity={0.5} />
             <directionalLight position={[-10, 10, 0]} intensity={0.4} />
