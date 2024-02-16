@@ -1,34 +1,37 @@
-import { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { RigidBody } from '@react-three/rapier';
 import { Sphere } from "@react-three/drei";
-import { calculateKickImpulse } from '../utils/physics';
-const Ball = ({ onCollisionEnter, playerRef }) => {
+import { useFrame } from '@react-three/fiber';
+import { useWebSocket } from '../socket/WebSocket';
+
+const Ball = ({ onGoalScored }) => {
+    const [ballPosition, setBallPosition] = useState([0, 5, 0]);
     const ballRef = useRef();
-
-    const kick = () => {
-        let impulse = calculateKickImpulse(playerRef, ballRef);
-        ballRef.current.applyImpulse(impulse, true);
-    };
-
-    const handleCollisionEnter = (event) => {
-        if (event.other.rigidBodyObject.name === "player") {
-            kick();
+    const { sendBallPosition } = useWebSocket();
+    useFrame(() => {
+        try {
+            const ballPosition = ballRef.current.translation();
+            sendBallPosition(ballPosition);
+        } catch (error) {
+            console.log("Error updating ball position:", error);
         }
-        if (onCollisionEnter) {
-            onCollisionEnter(event);
+    });
+
+    const handleGoalScored = () => {
+        console.log("Ball Cliked");
+        console.log(onGoalScored);
+        // Call the onGoalScored function passed from the parent component
+        if (typeof onGoalScored === 'function') {
+            onGoalScored();
+            console.log(ballPosition)
+            setBallPosition([0,5,0]);
+
         }
     };
 
     return (
-        <RigidBody
-            position={[0, 5, 0]} 
-            colliders={"ball"} 
-            name="ball" 
-            ref={ballRef}
-            restitution={1.2}
-            onCollisionEnter={handleCollisionEnter}
-        >
-            <Sphere args={[0.3]}>
+        <RigidBody position={ballPosition} colliders={"ball"} name="ball" ref={ballRef} restitution={1.2} >
+            <Sphere args={[0.3]} onClick={handleGoalScored}>
                 <meshStandardMaterial color="hotpink" />
             </Sphere>
         </RigidBody>

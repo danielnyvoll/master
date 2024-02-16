@@ -1,16 +1,30 @@
-import { RigidBody } from "@react-three/rapier";
+import React, { useEffect, useRef, useState } from 'react';
 import { Box } from "@react-three/drei";
+import { RigidBody } from "@react-three/rapier";
 import { calculateMovementImpulse } from '../utils/physics';
-import { useEffect, useRef } from 'react';
+import { useWebSocket } from '../socket/WebSocket';
+import { useFrame } from '@react-three/fiber';
 
-
-const Player = ({ onCollisionEnter, onCollisionExit, command }) => {
+const Player = () => {
+    const { sendPlayerPosition } = useWebSocket();
     const playerRef = useRef();
-    console.log(command); 
+    const [command, setCommand] = useState("");
 
-        
+    const handleWebSocketCommand = (cmd) => {
+        executeCommand(cmd);
+        setCommand(cmd);
+    };
+
     useEffect(() => {
-        const executeCommand = (cmd) => {
+        window.handleWebSocketCommand = handleWebSocketCommand;
+        return () => {
+            delete window.handleWebSocketCommand;
+        };
+    }, [handleWebSocketCommand]);
+    
+
+    const executeCommand = (cmd) => {
+        if (typeof cmd === 'string') {
             let directions = { forward: false, backward: false, left: false, right: false };
     
             switch (cmd.toLowerCase()) {
@@ -27,30 +41,36 @@ const Player = ({ onCollisionEnter, onCollisionExit, command }) => {
                     directions.right = true;
                     break;
                 default:
-                    // Handle unexpected commands (e.g., log an error message)
                     console.error(`Unexpected command: ${cmd}`);
                     break;
-                // Add more cases if needed
             }
     
             const impulse = calculateMovementImpulse(directions, 0.5, 7.5, playerRef);
             playerRef.current.applyImpulse(impulse, true);
-        };
-    
-        if (command) {
-            executeCommand(command);
+        } else {
+            console.log('Command must be a string');
         }
+    };
+    
+    useEffect(() => {
+        executeCommand(command);
     }, [command]);
     
+    useFrame((_state, delta) => {
+        try {
+            let playerPosition = playerRef.current.translation();
+            sendPlayerPosition(playerPosition);
+        } catch (error) {
+            console.log("Error while sending player position:", error);
+        }
+    });
 
     return (
         <RigidBody
             position={[3, 5, 0]}
             name="player"
             ref={playerRef}
-            onCollisionEnter={onCollisionEnter}
-            onCollisionExit={onCollisionExit}
-        >
+            lockRotations={true}>
             <Box args={[1, 1, 1]}>
                 <meshStandardMaterial />
             </Box>
