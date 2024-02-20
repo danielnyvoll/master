@@ -1,6 +1,5 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
 
-// Command slice remains the same
 const commandSlice = createSlice({
   name: 'command',
   initialState: '',
@@ -27,16 +26,31 @@ const ballPositionSlice = createSlice({
   },
 });
 
+const goalSlice = createSlice({
+    name: 'goal',
+    initialState:{
+        intersecting: false,
+    },
+    reducers: {
+        setGoal: (state, action) => {
+            state.intersecting = action.payload;
+        }
+    }
+});
+
 // Configure the store
 export const store = configureStore({
   reducer: {
     command: commandSlice.reducer,
     playerPosition: playerPositionSlice.reducer,
     ballPosition: ballPositionSlice.reducer,
+    goal: goalSlice.reducer,
   },
 });
 
+
 // Export actions
+export const { setGoal } = goalSlice.actions;
 export const { setCommand } = commandSlice.actions;
 export const { setPlayerPosition } = playerPositionSlice.actions;
 export const { setBallPosition } = ballPositionSlice.actions;

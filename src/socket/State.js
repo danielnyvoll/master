@@ -10,8 +10,6 @@ export const useSendCombinedPositions = () => {
     const { sendPositions } = useWebSocket();
 
     useEffect(() => {
-        console.log("player: " + playerPosition);
-        console.log("ball: " + ballPosition);
         sendPositions({ playerPosition, ballPosition });
     }, [playerPosition, ballPosition, sendPositions]);
 };

@@ -1,4 +1,4 @@
-import React, { Suspense, useState } from 'react';
+import React, { Suspense } from 'react';
 import {
   Box,
   Text,
@@ -8,12 +8,14 @@ import {
   RigidBody,
 } from "@react-three/rapier";
 import { MeshPhysicalMaterial } from "three";
+import { useDispatch, useSelector } from 'react-redux';
+import { setGoal } from '../store';
 
 const material = new MeshPhysicalMaterial();
 
 const Goal = ({ position, rotation }) => {
-  const [intersecting, setIntersection] = useState(false);
-
+  const dispatch = useDispatch();
+  const intersecting = useSelector(state => state.goal.intersecting);
   return (
     <RigidBody position={position} rotation={rotation} type='fixed'>
       <Box
@@ -55,8 +57,16 @@ const Goal = ({ position, rotation }) => {
         position={[0, 0, 1]}
         args={[5, 3, 1]}
         sensor
-        onIntersectionEnter={() => setIntersection(true)}
-        onIntersectionExit={() => setIntersection(false)}
+        onIntersectionEnter={({other}) => {
+          if(other.rigidBodyObject.name === "ball"){
+            dispatch(setGoal(true));
+          }  
+        }}
+        onIntersectionExit={() => {
+          setTimeout(() => {
+            dispatch(setGoal(false));
+          }, 1000);
+        }}
       />
     </RigidBody>
   );

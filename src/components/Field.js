@@ -3,12 +3,12 @@ import { RigidBody } from '@react-three/rapier';
 import { Box, Torus, Circle } from "@react-three/drei";
 
 const Field = () => {
-    const fieldLength = 120; // 30 * 3
-    const fieldWidth = 70; // 20 * 3
+    const fieldLength = 120;
+    const fieldWidth = 70;
     const fiveMeterBox = 5.5;
     const sixteenMeterBox = 16.5;
     const sixteenMeterBoxLenght = 29;
-    const centerCircleRadius = 9.15; // Standard center circle radius
+    const centerCircleRadius = 9.15;
     const penaltySpotDistance = 11;
 
     return (
@@ -74,6 +74,11 @@ const Field = () => {
                 <Box position={[0, 2, fieldWidth / 2 + 0.5]} args={[fieldLength, 5, 1]}><meshStandardMaterial visible={false} /></Box>
                 <Box position={[0, 2, -fieldWidth / 2 - 0.5]} args={[fieldLength, 5, 1]}><meshStandardMaterial visible={false} /></Box>
             </RigidBody>
+            
+
+
+
+          
         </>
     );
 };
