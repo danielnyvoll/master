@@ -1,32 +1,20 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { Box } from "@react-three/drei";
 import { RigidBody } from "@react-three/rapier";
 import { calculateMovementImpulse } from '../utils/physics';
-import { useWebSocket } from '../socket/WebSocket';
 import { useFrame } from '@react-three/fiber';
+import { useDispatch, useSelector } from 'react-redux';
+import { setPlayerPosition } from '../store';
 
 const Player = () => {
-    const { sendPlayerPosition } = useWebSocket();
+    const dispatch = useDispatch();
+    const command = useSelector((state) => state.command);
     const playerRef = useRef();
-    const [command, setCommand] = useState("");
-
-    const handleWebSocketCommand = (cmd) => {
-        executeCommand(cmd);
-        setCommand(cmd);
-    };
-
-    useEffect(() => {
-        window.handleWebSocketCommand = handleWebSocketCommand;
-        return () => {
-            delete window.handleWebSocketCommand;
-        };
-    }, [handleWebSocketCommand]);
     
-
     const executeCommand = (cmd) => {
         if (typeof cmd === 'string') {
             let directions = { forward: false, backward: false, left: false, right: false };
-    
+
             switch (cmd.toLowerCase()) {
                 case "up":
                     directions.forward = true;
@@ -42,35 +30,31 @@ const Player = () => {
                     break;
                 default:
                     console.error(`Unexpected command: ${cmd}`);
-                    break;
+                    return;
             }
-    
+
             const impulse = calculateMovementImpulse(directions, 0.5, 7.5, playerRef);
             playerRef.current.applyImpulse(impulse, true);
         } else {
             console.log('Command must be a string');
         }
     };
-    
-    useEffect(() => {
-        executeCommand(command);
-    }, [command]);
-    
+    executeCommand(command);
+
+
     useFrame((_state, delta) => {
-        try {
-            let playerPosition = playerRef.current.translation();
-            sendPlayerPosition(playerPosition);
-        } catch (error) {
-            console.log("Error while sending player position:", error);
+        if (playerRef.current) {
+            try {
+                const { x, y, z } = playerRef.current.translation();
+                dispatch(setPlayerPosition({ x, y, z }));
+            } catch (error) {
+                console.log("Error while sending ball position:", error);
+            }
         }
     });
 
     return (
-        <RigidBody
-            position={[3, 5, 0]}
-            name="player"
-            ref={playerRef}
-            lockRotations={true}>
+        <RigidBody position={[3, 5, 0]} name="player" ref={playerRef} lockRotations={true}>
             <Box args={[1, 1, 1]}>
                 <meshStandardMaterial />
             </Box>

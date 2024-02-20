@@ -1,49 +1,37 @@
-import { useEffect, useRef, useState } from 'react';
+// socket/WebSocket.js
+import { useCallback, useEffect, useRef } from 'react';
 import io from 'socket.io-client';
-import Soccer from '../Soccer';
-
-const wsUrl = 'http://127.0.0.1:5000'; // Your server URL
+import { useDispatch } from 'react-redux';
+import { setCommand } from '../store';
+const wsUrl = 'http://127.0.0.1:5000'; // Update with your actual WebSocket server URL
 
 export const useWebSocket = () => {
-  const socket = useRef(null);
-  const [command, setCommand] = useState('');
+    const dispatch = useDispatch();
+    const socket = useRef(null);
 
-  useEffect(() => {
-    // Initialize WebSocket connection
-    socket.current = io(wsUrl);
+    useEffect(() => {
+      socket.current = io(wsUrl, { transports: ['websocket'] });
+  
+      socket.current.on('command', (command) => {
+          console.log('Received command:', command);
+          dispatch(setCommand(command));
+      });
+  
+      return () => {
+          if (socket.current) socket.current.disconnect();
+      };
+  }, []); // This ensures the setup and cleanup are only run once
+  
 
-    // Event listener for when connection is established
-    socket.current.on('connect', () => {
-      console.log('WebSocket Connected');
-    });
+    // Function to send combined player and ball positions
+    const sendPositions = useCallback(({ playerPosition, ballPosition }) => {
+        // Ensure the socket is connected before attempting to send data
+        if (socket.current.connected) {
+          console.log("Pos: ", playerPosition, ballPosition);
+            socket.current.emit('update_positions', { playerPosition, ballPosition });
+        }
+    }, []);
 
-    // Event listener for when connection is disconnected
-    socket.current.on('disconnect', () => {
-      console.log('WebSocket Disconnected');
-    });
-
-    // Event listener for receiving commands
-    socket.current.on('command', (cmd) => {
-      window.handleWebSocketCommand(cmd);
-      setCommand(cmd); // Update the command state
-    });
-
-    return () => {
-      if (socket.current) {
-        socket.current.disconnect(); // Disconnect WebSocket
-      }
-    };
-  }, []); // Empty dependency array means this effect runs only once on mount
-
-  // Function to send player position via WebSocket
-  const sendPlayerPosition = (position) => {
-    socket.current.emit('update_player_position', position);
-  };
-
-  // Function to send ball position via WebSocket
-  const sendBallPosition = (position) => {
-    socket.current.emit('update_ball_position', position);
-  };
-
-  return { command, sendBallPosition, sendPlayerPosition };
+    // Return the sendPositions function (and any other functions you need) from the hook
+    return { sendPositions };
 };

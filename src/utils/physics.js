@@ -39,7 +39,6 @@ export const calculateMovementImpulse = (directions, acceleration = 2.5, maxSpee
     if (currentSpeed > maxSpeed) {
         playerRef.current.setLinvel(currentVelocity.multiplyScalar(maxSpeedFactor), true);
     }
-    console.log(impulse);
     return impulse;
 };
 
