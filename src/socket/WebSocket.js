@@ -21,9 +21,9 @@ export const useWebSocket = () => {
       };
   }, []); 
   
-    const sendPositions = useCallback(({ playerPosition, ballPosition }) => {
+    const sendPositions = useCallback(({ playerPosition, ballPosition, isGoal }) => {
         if (socket.current.connected) {
-            socket.current.emit('update_positions', { playerPosition, ballPosition });
+            socket.current.emit('update_positions', { playerPosition, ballPosition, isGoal });
         }
     }, []);
 
