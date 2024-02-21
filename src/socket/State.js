@@ -7,9 +7,10 @@ import { useWebSocket } from './WebSocket';
 export const useSendCombinedPositions = () => {
     const playerPosition = useSelector(state => state.playerPosition);
     const ballPosition = useSelector(state => state.ballPosition);
+    const isGoal = useSelector(state => state.goal);
     const { sendPositions } = useWebSocket();
 
     useEffect(() => {
-        sendPositions({ playerPosition, ballPosition });
-    }, [playerPosition, ballPosition, sendPositions]);
+        sendPositions({ playerPosition, ballPosition, isGoal });
+    }, [playerPosition, ballPosition, isGoal, sendPositions]);
 };
