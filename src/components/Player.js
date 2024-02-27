@@ -33,8 +33,12 @@ const Player = () => {
                     return;
             }
 
-            const impulse = calculateMovementImpulse(directions, 0.5, 7.5, playerRef);
-            playerRef.current.applyImpulse(impulse, true);
+            try {
+                const impulse = calculateMovementImpulse(directions, 0.5, 7.5, playerRef);
+                playerRef.current.applyImpulse(impulse, true);
+            } catch (error) {
+                console.log(error);
+            }
         } else {
             console.log('Command must be a string');
         }
