@@ -1,38 +1,69 @@
-/* TrainingScreen.css */
-.training-screen {
-    background-color: #00A991;
-    width: 100%;
-    height: 95vh;
+.button-container {
     display: flex;
-    border-radius: 30px;
-    position: fixed;
-    bottom: 0;
-  }
+    background-color: #0000; /* Transparent background to collapse any space between buttons */
+    margin-left: 2%;
+    margin-right: 2%;
+    margin-bottom: 1%;
+}
+  
+.button {
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    transition-duration: 0.1s;
+    cursor: pointer;
+    outline: none;
+    flex: 1; /* This will make buttons expand equally to fill the parent container */
+}
+  
+/* Style for the red button */
+.button.red {
+    background-color: #F4CECE;
+    color: white;
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
+    margin-right: -1px; /* Overlaps the border with the next button */
+}
 
-  .left-container {
-    width: 50%;
-    height: 100%;
-  }
+.button.red:hover,
+.button-container.active { /* The button will also maintain the color on click */
+    background-color: #E57373; /* A more vivid red color on hover and click */
+}
 
-  .right-container {
-    width: 50%;
-    height: 100%;
+/* Style for the green button */
+.button.green {
+    background-color: #B0E4DD;
+    color: white;
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 30px;
+}
 
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-  }
-
-  .component-container {
-    background-color: white;
-    border-radius: 30px;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.button.green:hover,
+.button.green.active { /* The button will also maintain the color on click */
+    background-color: #76D7C4; /* A more vivid green color on hover and click */
+}
+  
+/* Removes the outline on focus for both buttons */
+.button:focus {
+    outline: none;
+}
+table {
+    margin-left: 15%;
+    margin-top: 2%;
+    margin-bottom: 1%;
+    border-collapse: collapse;
   }
   
-  .game-container {
-    width: 95%;
-    height: 95%;
+  th, td {
+    text-align: left;
+    padding: 8px;
+    border: 1px solid #ddd;
   }
+  
+  th {
+    background-color: #f2f2f2;
+  }
+  

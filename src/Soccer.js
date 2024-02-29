@@ -63,9 +63,7 @@ const Soccer = () => {
 
     return (
         <>
-            <form onSubmit={handleCommandSubmit} style={{ position: 'absolute', zIndex: 1 }}>
-                <input type="text" value={command} onChange={handleCommandChange} placeholder="Enter command" />
-            </form>
+            
         <Canvas 
     >
             <ambientLight intensity={0.5} />

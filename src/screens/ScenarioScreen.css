@@ -1,0 +1,5 @@
+.select-container {
+  border-radius: 30px;
+  margin: 1%; /* Margin around the containers to create space from the borders */
+  margin-bottom: 2%;
+}
