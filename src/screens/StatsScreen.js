@@ -1,6 +1,6 @@
 import "./StatsScreen.css";
 import "./Screen.css";
-
+import LiveLineGraph from "./objects/Graph";
 
 function StatsScreen() {
     return (
@@ -16,7 +16,7 @@ function StatsScreen() {
   
           <div className="component-container">
             <div className="game-container">
-                <h1>GRAF HER?</h1>
+                <LiveLineGraph></LiveLineGraph>
             </div>
             </div>
             <div className="bottom-right-container">

@@ -44,5 +44,34 @@
     cursor: pointer;
   }
 
-  /* Additional styling can be added as needed */
+  /* ScenarioListStyle.css */
+
+.selected {
+    box-shadow: 0 0 10px rgba(0,0,0,0.5); /* Adjust shadow to your liking */
+    border-radius: 5px; /* Optional, for rounded corners */
+  }
+  
+  .input-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .edit-icon {
+    cursor: pointer;
+    user-select: none; /* Prevents text selection */
+  }
+  
+  /* Ensure your .scenario-list, ul, and li are styled to handle the layout properly */
+  li {
+    list-style-type: none; /* Removes bullet points from list items */
+  }
+  .cursor-text {
+    cursor: text;
+  }
+  
+  .cursor-default {
+    cursor: default;
+  }
   
