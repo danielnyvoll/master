@@ -11,7 +11,6 @@ const Player = ({ onCollisionEnter, onCollisionExit, command }) => {
 
     const executeCommand = (cmd) => {
         let directions = { forward: false, backward: false, left: false, right: false };
-
         switch (cmd.toLowerCase()) {
             case "up":
                 directions.forward = true;

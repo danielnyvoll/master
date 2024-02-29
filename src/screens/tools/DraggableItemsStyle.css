@@ -1,0 +1,12 @@
+.canvas-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Adjust the height as needed */
+  }
+  
+  .single-canvas {
+    flex: 1; /* Each canvas takes equal width */
+    height: 100%; /* Full height of the container */
+  }
+  

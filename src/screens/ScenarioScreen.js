@@ -1,11 +1,12 @@
 import React from "react";
 import "./Screen.css";
+import "./ScenarioScreen.css";
 import Field from "../components/Field";
 import { Canvas } from '@react-three/fiber';
 import { Physics } from "@react-three/rapier";
 import { OrbitControls } from "@react-three/drei";
 import ScenarioList from "./objects/ScenarioList";
-
+import Scene from "./tools/DraggableItems";
 
 function ScenarioScreen() {
   return (
@@ -30,8 +31,12 @@ function ScenarioScreen() {
           </div>
           </div>
           <div className="bottom-right-container">
-          <h1>INFO</h1>
-
+            <div className="title">Set Up Your Own Scenario With These Objects:</div>
+            
+            <div className="bottom-right-container-objects">
+              
+              <Scene></Scene>
+            </div>       
         </div>
       </div>
     </div>
