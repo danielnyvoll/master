@@ -54,7 +54,7 @@ const Goal = ({ position, rotation }) => {
        * colliders to pass through it.
        */}
       <CuboidCollider
-        position={[0, 0, 1]}
+        position={[0, 0, -1]}
         args={[5, 3, 1]}
         sensor
         onIntersectionEnter={({other}) => {

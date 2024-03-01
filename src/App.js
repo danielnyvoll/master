@@ -1,25 +1,15 @@
 // App.js
-
-import React, { useState, useEffect } from 'react';
 import Soccer from './Soccer';
+import { useSelector } from 'react-redux';
 
 
 function App() {
-    const [resetCount, setResetCount] = useState(0);
-    const x = 5;
+    const reset = useSelector((state) => state.reset);
 
-    useEffect(() => {
-        const intervalId = setInterval(() => {
-            // Increment resetCount every x seconds
-            setResetCount(prevCount => prevCount + 1);
-        }, x * 1000); // x is the number of seconds for reset
-
-        // Cleanup function to clear interval on component unmount
-        return () => clearInterval(intervalId);
-    }, []); // Empty dependency array ensures the effect runs only once
+    console.log(reset);
 
     return (
-        <Soccer key={resetCount} /> 
+        <Soccer key={reset} /> 
     );
 }
 

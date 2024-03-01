@@ -8,6 +8,14 @@ const commandSlice = createSlice({
   },
 });
 
+const resetSlice = createSlice({
+  name: 'reset',
+  initialState: false,
+  reducers: {
+    setReset: (state, action) => action.payload,
+  },
+});
+
 // Player position slice
 const playerPositionSlice = createSlice({
   name: 'playerPosition',
@@ -45,6 +53,7 @@ export const store = configureStore({
     playerPosition: playerPositionSlice.reducer,
     ballPosition: ballPositionSlice.reducer,
     goal: goalSlice.reducer,
+    reset: resetSlice.reducer,
   },
 });
 
@@ -54,3 +63,4 @@ export const { setGoal } = goalSlice.actions;
 export const { setCommand } = commandSlice.actions;
 export const { setPlayerPosition } = playerPositionSlice.actions;
 export const { setBallPosition } = ballPositionSlice.actions;
+export const { setReset } = resetSlice.actions;

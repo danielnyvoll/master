@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react';
 import io from 'socket.io-client';
 import { useDispatch } from 'react-redux';
-import { setCommand } from '../store';
+import { setCommand, setReset } from '../store';
 const wsUrl = 'http://127.0.0.1:5000';
 
 export const useWebSocket = () => {
@@ -12,9 +12,17 @@ export const useWebSocket = () => {
       socket.current = io(wsUrl, { transports: ['websocket'] });
   
       socket.current.on('command', (command) => {
-          console.log('Received command:', command);
+          
           dispatch(setCommand(command));
       });
+
+      socket.current.on('reset', (response) => {
+        if (response) {
+            console.log('Received reset:', response);
+            dispatch(setReset(response))
+            dispatch(setReset(false))
+        }
+    });
   
       return () => {
           if (socket.current) socket.current.disconnect();

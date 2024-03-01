@@ -20,7 +20,7 @@ const Field = () => {
                 </Box>
                 
             </RigidBody>
-<Box position={[-fieldLength/2.32, 0.5, sixteenMeterBox]} args={[sixteenMeterBox, 0.1, 0.2]}><meshStandardMaterial color="white" /></Box>
+                <Box position={[-fieldLength/2.32, 0.5, sixteenMeterBox]} args={[sixteenMeterBox, 0.1, 0.2]}><meshStandardMaterial color="white" /></Box>
                 <Box position={[fieldLength/2.32, 0.5, sixteenMeterBox]} args={[sixteenMeterBox, 0.1, 0.2]}><meshStandardMaterial color="white" /></Box>
                 
                 <Box position={[-fieldLength/2.32, 0.5, -sixteenMeterBox]} args={[sixteenMeterBox, 0.1, 0.2]}><meshStandardMaterial color="white" /></Box>
@@ -61,6 +61,11 @@ const Field = () => {
             {/* Walls */}
             <RigidBody type="fixed">
                 {/* Horizontal Walls */}
+
+                <Box position={[fieldLength / 2 + 0.5, 2, 0]} args={[1, 8, fieldWidth]}><meshStandardMaterial visible={false} /></Box>
+                <Box position={[-fieldLength / 2 - 0.5, 2, 0]} args={[1, 8, fieldWidth]}><meshStandardMaterial visible={false} /></Box>
+
+                {/*
                 <Box position={[fieldLength / 2 + 0.5, 2, 20]} args={[1, 5, fieldWidth/2.25]}><meshStandardMaterial visible={false} /></Box>
                 <Box position={[fieldLength / 2 + 0.5, 2, -20]} args={[1, 5, fieldWidth/2.25]}><meshStandardMaterial visible={false} /></Box>
                 <Box position={[fieldLength / 2 + 1.5, 3, 0]} args={[1, 6, 9]}><meshStandardMaterial visible={false} /></Box>
@@ -69,10 +74,11 @@ const Field = () => {
                 <Box position={[-fieldLength / 2 - 0.5, 2, 20]} args={[1, 5, fieldWidth/2.25]}><meshStandardMaterial visible={false} /></Box>
                 <Box position={[-fieldLength / 2 - 0.5, 2, -20]} args={[1, 5, fieldWidth/2.25]}><meshStandardMaterial visible={false} /></Box>
                 <Box position={[-fieldLength / 2 - 1.5, 3, 0]} args={[1, 6, 9]}><meshStandardMaterial visible={false} /></Box>
+                */}
 
                 {/* Vertical Walls */}
-                <Box position={[0, 2, fieldWidth / 2 + 0.5]} args={[fieldLength, 5, 1]}><meshStandardMaterial visible={false} /></Box>
-                <Box position={[0, 2, -fieldWidth / 2 - 0.5]} args={[fieldLength, 5, 1]}><meshStandardMaterial visible={false} /></Box>
+                <Box position={[0, 2, fieldWidth / 2 + 0.5]} args={[fieldLength, 8, 1]}><meshStandardMaterial visible={false} /></Box>
+                <Box position={[0, 2, -fieldWidth / 2 - 0.5]} args={[fieldLength, 8, 1]}><meshStandardMaterial visible={false} /></Box>
             </RigidBody>
             
 
