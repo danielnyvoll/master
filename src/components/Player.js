@@ -1,53 +1,65 @@
-import { RigidBody } from "@react-three/rapier";
+import React, { useRef } from 'react';
 import { Box } from "@react-three/drei";
+import { RigidBody } from "@react-three/rapier";
 import { calculateMovementImpulse } from '../utils/physics';
-import { useRef } from 'react';
-import { useFrame } from "@react-three/fiber";
+import { useFrame } from '@react-three/fiber';
+import { useDispatch, useSelector } from 'react-redux';
+import { setPlayerPosition } from '../store';
 
 
-const Player = ({ onCollisionEnter, onCollisionExit, command }) => {
+const Player = ( {position}) => {
+    const dispatch = useDispatch();
+    const command = useSelector((state) => state.command);
     const playerRef = useRef();
-    console.log(command); 
-
+    
     const executeCommand = (cmd) => {
-        let directions = { forward: false, backward: false, left: false, right: false };
-        switch (cmd.toLowerCase()) {
-            case "up":
-                directions.forward = true;
-                break;
-            case "down":
-                directions.backward = true;
-                break;
-            case "left":
-                directions.left = true;
-                break;
-            case "right":
-                directions.right = true;
-                break;
-            default:
-                // Handle unexpected commands (e.g., log an error message)
-                console.error(`Unexpected command: ${cmd}`);
-                return;
-            // Add more cases if needed
-        }
+        if (typeof cmd === 'string') {
+            let directions = { forward: false, backward: false, left: false, right: false };
 
-        const impulse = calculateMovementImpulse(directions, 0.5, 7.5, playerRef);
-        playerRef.current.applyImpulse(impulse, true);
+            switch (cmd.toLowerCase()) {
+                case "up":
+                    directions.forward = true;
+                    break;
+                case "down":
+                    directions.backward = true;
+                    break;
+                case "left":
+                    directions.left = true;
+                    break;
+                case "right":
+                    directions.right = true;
+                    break;
+                default:
+                    console.error(`Unexpected command: ${cmd}`);
+                    return;
+            }
+
+            try {
+                const impulse = calculateMovementImpulse(directions, 0.5, 7.5, playerRef);
+                playerRef.current.applyImpulse(impulse, true);
+            } catch (error) {
+                console.log(error);
+            }
+        } else {
+            console.log('Command must be a string');
+        }
     };
+    executeCommand(command);
+
 
     useFrame((_state, delta) => {
-        executeCommand(command);
+        if (playerRef.current) {
+            try {
+                const { x, y, z } = playerRef.current.translation();
+                dispatch(setPlayerPosition({ x, y, z }));
+            } catch (error) {
+                console.log("Error while sending ball position:", error);
+            }
+        }
     });
-    
 
     return (
-        <RigidBody
-            position={[3, 5, 0]}
-            name="player"
-            ref={playerRef}
-            onCollisionEnter={onCollisionEnter}
-            onCollisionExit={onCollisionExit}
-        >
+        <RigidBody position={position} name="player" ref={playerRef} lockRotations={true}>
             <Box args={[1, 1, 1]}>
                 <meshStandardMaterial />
             </Box>
