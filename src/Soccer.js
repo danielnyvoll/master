@@ -1,5 +1,5 @@
 // Soccer.js
-import React, { Suspense, useState, useEffect } from 'react';
+import React, { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { Physics } from '@react-three/rapier';
@@ -11,7 +11,7 @@ import Goal from './components/Goal';
 const Soccer = () => {
     return (
         <Canvas         
-            style={{ width: '100vw', height: '100vh', position: 'absolute', top: 0, left: 0 }}
+            style={{ width: '100vw', height: '100vh'}}
             camera={{ position: [0, 10, 20] }}
         >
             <ambientLight intensity={0.5} />

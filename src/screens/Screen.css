@@ -20,7 +20,7 @@
     gap: 1%; /* This will create a gap between the inner containers */
   }
   
-  .info-container, .component-container, .bottom-right-container {
+  .info-container, .component-container, .bottom-right-container, .bottom-left-container, .title {
     background-color: white;
     border-radius: 30px;
     margin: 1%; /* Margin around the containers to create space from the borders */

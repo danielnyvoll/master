@@ -6,6 +6,7 @@ import LiveLineGraph from "./objects/Graph";
 
 function TraininingScreen() {
     return (
+      <div>
       <div className="training-screen">
         <div className="left-container">
           <div className="info-container">
@@ -20,11 +21,7 @@ function TraininingScreen() {
         </div>
         <div className="right-container">
   
-          <div className="component-container">
-            <div className="game-container">
-                <Soccer />
-            </div>
-            </div>
+          
             <div className="bottom-right-container">
             <LiveLineGraph></LiveLineGraph>
             <table>
@@ -50,6 +47,11 @@ function TraininingScreen() {
     </table>
           </div>
         </div>
+      </div>
+
+      <div className="game-container">
+          <Soccer />
+      </div>
       </div>
     );
   }
