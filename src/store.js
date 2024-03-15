@@ -1,5 +1,39 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
 
+
+const scenariosSlice = createSlice({
+  name: 'scenarios',
+  initialState: {
+    currentScenarioIndex: 0,
+    list: [
+      { name: 'Match', objects: [] },
+      { name: 'Basic Shot', objects: [] },
+      // ... other scenarios
+    ],
+  },
+  reducers: {
+    setCurrentScenarioIndex: (state, action) => {
+      state.currentScenarioIndex = action.payload;
+    },
+    updateScenarioObjects: (state, action) => {
+      const { scenarioIndex, objects } = action.payload;
+      state.list[scenarioIndex].objects = objects;
+    },
+    addScenario: (state, action) => {
+      state.list.push({ name: action.payload, objects: [] });
+    },
+    updateObjectPosition: (state, action) => {
+      const { scenarioIndex, objectId, newPosition } = action.payload;
+      const scenario = state.list[scenarioIndex];
+      const objectIndex = scenario.objects.findIndex(obj => obj.id === objectId);
+      if (objectIndex !== -1) {
+        scenario.objects[objectIndex].position = newPosition;
+      }
+    }
+  },
+});
+
+
 const commandSlice = createSlice({
   name: 'command',
   initialState: '',
@@ -54,6 +88,7 @@ export const store = configureStore({
     ballPosition: ballPositionSlice.reducer,
     goal: goalSlice.reducer,
     reset: resetSlice.reducer,
+    scenarios: scenariosSlice.reducer,
   },
 });
 
@@ -64,3 +99,4 @@ export const { setCommand } = commandSlice.actions;
 export const { setPlayerPosition } = playerPositionSlice.actions;
 export const { setBallPosition } = ballPositionSlice.actions;
 export const { setReset } = resetSlice.actions;
+export const { setCurrentScenarioIndex, updateScenarioObjects, addScenario, updateObjectPosition } = scenariosSlice.actions;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./Screen.css";
 import "./ScenarioScreen.css";
 import Field from "../components/Field";
@@ -13,41 +13,47 @@ import { Graph, useNode } from "graphire";
 import useDragSnap from "../utils/useDrag";
 import * as THREE from 'three';
 import infoIcon from '../resources/Info.png'; 
-
+import { useDispatch, useSelector } from 'react-redux';
+import { updateObjectPosition, setCurrentScenarioIndex, updateScenarioObjects } from '../store';
 
 function ScenarioScreen() {
+  const dispatch = useDispatch();
+  const currentScenarioIndex = useSelector(state => state.scenarios.currentScenarioIndex);
+  const scenarios = useSelector(state => state.scenarios.list);
   const [showInfo, setShowInfo] = useState(false);
-  const [objects, setObjects] = useState([]);
 
-  const handleInfoClick = () => {
-    setShowInfo(!showInfo);
-};
+  const handleInfoClick = () => setShowInfo(!showInfo);
 
+  const handleScenarioSelection = (index) => {
+    dispatch(setCurrentScenarioIndex(index));
+  };
   const addObject = (type) => {
     const newPosition = [Math.random() * 5, 0.5, 0];
-
     const attributes = {
-        Player: { color: "#EF5B5B", id: 0 }, // Red color for Player
-        Ball: { color: "white", id: 1 },     // White color for Ball
-        Cone: { color: "black", id: 2 },     // Black color for Cone
+      Player: { color: "#EF5B5B", id: Date.now() },
+      Ball: { color: "white", id: Date.now() },
+      Cone: { color: "black", id: Date.now() },
     };
 
     if (attributes[type]) {
-        const { color, id } = attributes[type];
-        setObjects([...objects, { type, id, position: newPosition, color }]);
-    } else {
-        console.warn("Unknown type:", type);
+      const { color, id } = attributes[type];
+      const newObject = { type, id, position: newPosition, color };
+
+      // Assuming you have an action to add or update objects in the scenario
+      const updatedObjects = [...scenarios[currentScenarioIndex].objects, newObject];
+      dispatch(updateScenarioObjects({ scenarioIndex: currentScenarioIndex, objects: updatedObjects }));
     }
-};
+  };
+  const objects = scenarios[currentScenarioIndex]?.objects || [];
 
 
   return (
     <div className="training-screen">
       <div className="left-container">
         <div className="select-container">
-            <ScenarioList></ScenarioList>
+            <ScenarioList onScenarioSelect={handleScenarioSelection}></ScenarioList>
         </div>
-        <div className="title">Set Up Your Own Scenario With These Objects:
+        <div className="title"> <span className="title-text">Set Up Your Own Scenario With These Objects:</span>
         <img 
     src={infoIcon} 
     alt="Info" 
@@ -108,26 +114,47 @@ export default ScenarioScreen;
 
 const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0) 
 
-const Node = (props) => {
-  const { uid, x, y, color = "white" } = props;
-  const ref = React.useRef();
+const Node = ({ uid, x, y, z, color }) => {
+  // Initialize the ref at the top before any usage
+  const ref = useRef();
+  const dispatch = useDispatch();
+  const currentScenarioIndex = useSelector(state => state.scenarios.currentScenarioIndex);
 
-  const api = useNode((pos) => {
-    ref.current.position.fromArray(pos);
+  // Use useNode to interact with the 3D object
+  useNode((pos) => {
+    if (ref.current) {
+      ref.current.position.fromArray(pos);
+    }
   }, { uid, x, y });
 
-  const bind = useDragSnap(([x, y, z], e) => {
-    if(y > 0 || y < 0){
-      y = 0;
+  // Define the plane for useDragSnap, assuming you want to restrict movement to a plane
+  const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+
+  // Setup drag and drop logic
+  const bind = useDragSnap(([newX, newY, newZ], event) => {
+    // Assuming y should be constrained or adjusted based on your requirements
+    newY = 0;
+    if (ref.current) {
+      ref.current.position.set(newX, newY, newZ);
     }
-    e.stopPropagation(); 
-    api.set({ x, z });
-}, plane);
+    dispatch(updateObjectPosition({
+      scenarioIndex: currentScenarioIndex,
+      objectId: uid,
+      newPosition: [newX, newY, newZ]
+    }));
+  }, plane);
+
+  // useEffect to update the position when x, y, or z props change
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.position.set(x, y, z);
+    }
+  }, [x, y, z]);
 
   return (
-    <mesh ref={ref} {...bind()} rotation={[0,Math.PI/2,0]} castShadow> 
-      <cylinderGeometry args={[1,1,0.2, 40]}/>
+    <mesh ref={ref} {...bind()} rotation={[0, Math.PI / 2, 0]} castShadow>
+      <cylinderGeometry args={[1, 1, 0.2, 40]} />
       <meshStandardMaterial attach="material" color={color} />
     </mesh>
-  )
+  );
 };

@@ -1,18 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
-import './ScenarioListStyle.css'; // Make sure this CSS file contains your styles
+import './ScenarioListStyle.css';
+import { useSelector, useDispatch } from 'react-redux';
+import { setCurrentScenarioIndex, addScenario, updateScenarioObjects } from "../../store"; // Adjust the import path as necessary
 
-const ScenarioList = () => {
-  const [scenarios, setScenarios] = useState([
-    'Match',
-    'Basic Shot',
-    'Basic Dribbling',
-    'Basic Pass',
-    'Custom Scenario 1',
-  ]);
+const ScenarioList = ({ onScenarioSelect }) => {
+  const dispatch = useDispatch();
+  const scenarios = useSelector((state) => state.scenarios.list);
   const [newScenario, setNewScenario] = useState('');
   const [selectedScenarioIndex, setSelectedScenarioIndex] = useState(null);
   const [showEditIcon, setShowEditIcon] = useState(false);
-  const inputRefs = useRef(scenarios.map(() => React.createRef()));
+  const inputRefs = useRef([]);
 
   useEffect(() => {
     inputRefs.current = scenarios.map((_, i) => inputRefs.current[i] ?? React.createRef());
@@ -24,34 +21,29 @@ const ScenarioList = () => {
 
   const handleAddScenario = () => {
     if (newScenario.trim() !== '') {
-      setScenarios([...scenarios, newScenario]);
+      dispatch(addScenario(newScenario));
       setNewScenario('');
     }
   };
 
-  const updateScenario = (index, value) => {
-    const updatedScenarios = [...scenarios];
-    updatedScenarios[index] = value;
-    setScenarios(updatedScenarios);
-  };
-
   const handleSelectScenario = (index) => {
-    setSelectedScenarioIndex(index);
-    setShowEditIcon(false); // Reset edit icon visibility
+    dispatch(setCurrentScenarioIndex(index));
+    onScenarioSelect(index); // This callback is used to inform ScenarioScreen
+    setSelectedScenarioIndex(null); // Reset editing state
+    setShowEditIcon(false); // Hide edit icon
   };
 
   const handleToggleEditIcon = (e, index) => {
-    e.stopPropagation(); // Prevent click from bubbling to the li element
-    const isCurrentlyShown = selectedScenarioIndex === index && showEditIcon;
-    setShowEditIcon(!isCurrentlyShown);
+    e.stopPropagation(); // Prevent li click event from firing
+    setShowEditIcon(selectedScenarioIndex !== index || !showEditIcon);
+    setSelectedScenarioIndex(index);
+  };
 
-    if (!isCurrentlyShown) {
-      // Focus on the input field and make it editable
-      setSelectedScenarioIndex(index);
-      setTimeout(() => inputRefs.current[index].current.focus(), 0);
-    } else {
-      setSelectedScenarioIndex(null);
-    }
+  const updateScenario = (index, newName) => {
+    const updatedScenarios = scenarios.map((scenario, sIndex) => 
+      sIndex === index ? { ...scenario, name: newName } : scenario
+    );
+    dispatch(updateScenarioObjects({scenarioIndex: index, objects: updatedScenarios[index].objects}));
   };
 
   return (
@@ -68,17 +60,16 @@ const ScenarioList = () => {
               <input
                 ref={inputRefs.current[index]}
                 type="text"
-                value={scenario}
+                value={selectedScenarioIndex === index ? scenario.name : scenario.name}
                 onChange={(e) => updateScenario(index, e.target.value)}
                 readOnly={selectedScenarioIndex !== index || !showEditIcon}
                 style={{ cursor: selectedScenarioIndex === index && showEditIcon ? 'text' : 'default' }}
               />
-              {selectedScenarioIndex === index && (
-                <span
-                  className="edit-icon"
-                  onClick={(e) => handleToggleEditIcon(e, index)}
-                >✏️</span>
-              )}
+              <span
+                className="edit-icon"
+                onClick={(e) => handleToggleEditIcon(e, index)}
+                style={{ visibility: selectedScenarioIndex === index ? 'visible' : 'hidden' }}
+              >✏️</span>
             </div>
           </li>
         ))}
