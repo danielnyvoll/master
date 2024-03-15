@@ -62,13 +62,13 @@ const Field = () => {
             <RigidBody type="fixed">
                 {/* Horizontal Walls */}
 
-                <Box position={[fieldLength / 2 + 0.5, 0.1, 0]} args={[1, 8, fieldWidth]}><meshStandardMaterial visible={false} /></Box>
-                <Box position={[-fieldLength / 2 - 0.5, 0.1, 0]} args={[1, 8, fieldWidth]}><meshStandardMaterial visible={false} /></Box>
+                <Box position={[fieldLength / 2 + 0.5, 2, 0]} args={[1, 8, fieldWidth]}><meshStandardMaterial visible={true} /></Box>
+                <Box position={[-fieldLength / 2 - 0.5, 2, 0]} args={[1, 8, fieldWidth]}><meshStandardMaterial visible={true} /></Box>
 
 
                 {/* Vertical Walls */}
-                <Box position={[0, 2, fieldWidth / 2 + 0.5]} args={[fieldLength, 8, 1]}><meshStandardMaterial visible={false} /></Box>
-                <Box position={[0, 2, -fieldWidth / 2 - 0.5]} args={[fieldLength, 8, 1]}><meshStandardMaterial visible={false} /></Box>
+                <Box position={[0, 2, fieldWidth / 2 + 0.5]} args={[fieldLength, 8, 1]}><meshStandardMaterial visible={true} /></Box>
+                <Box position={[0, 2, -fieldWidth / 2 - 0.5]} args={[fieldLength, 8, 1]}><meshStandardMaterial visible={true} /></Box>
             </RigidBody>
             
 
