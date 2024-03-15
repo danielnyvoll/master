@@ -33,7 +33,7 @@ const Ball = ({ onGoalScored }) => {
     
 
     return (
-        <RigidBody position={[0, 2, 10]} colliders={"ball"} name="ball" ref={ballRef} restitution={1.2} friction={5.2}>
+        <RigidBody position={[0, 1, 10]} colliders={"ball"} name="ball" ref={ballRef} restitution={1.2} friction={5.2}>
             <Sphere args={[0.3]}>
                 <meshStandardMaterial color="hotpink" />
             </Sphere>

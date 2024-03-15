@@ -4,7 +4,7 @@ import { RigidBody } from "@react-three/rapier";
 import { calculateMovementImpulse } from '../utils/physics';
 import { useFrame } from '@react-three/fiber';
 import { useDispatch, useSelector } from 'react-redux';
-import { setPlayerPosition } from '../store';
+import { setCommand, setPlayerPosition } from '../store';
 
 const Player = () => {
     const dispatch = useDispatch();
@@ -42,6 +42,7 @@ const Player = () => {
         } else {
             console.log('Command must be a string');
         }
+        dispatch(setCommand(''));
     };
     executeCommand(command);
 
@@ -58,7 +59,7 @@ const Player = () => {
     });
 
     return (
-        <RigidBody position={[3, 5, 0]} name="player" ref={playerRef} lockRotations={true}>
+        <RigidBody position={[3, 1, 0]} name="player" ref={playerRef} lockRotations={true}>
             <Box args={[1, 1, 1]}>
                 <meshStandardMaterial />
             </Box>

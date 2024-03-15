@@ -12,7 +12,7 @@ export const calculateKickImpulse = (kickerRef, ballRef, kickStrength = 2.0) => 
     return direction;
 };
 
-export const calculateMovementImpulse = (directions, acceleration = 2.5, maxSpeed = 17.5, playerRef) => {
+export const calculateMovementImpulse = (directions, acceleration = 17.5, maxSpeed = 17.5, playerRef) => {
     if (!playerRef.current) {
         return { x: 0, y: 0, z: 0 };
     }
