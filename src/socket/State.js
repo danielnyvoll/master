@@ -14,6 +14,6 @@ export const useSendCombinedPositions = () => {
     const { direction, distance} = vision(playerPosition, ballPosition);
 
     useEffect(() => {
-        sendPositions({ direction, distance, isGoal });
-    }, [direction, distance, isGoal, sendPositions]);
+        sendPositions({ playerPosition, ballPosition, isGoal });
+    }, [playerPosition, ballPosition, isGoal, sendPositions]);
 };

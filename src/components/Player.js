@@ -5,15 +5,19 @@ import { calculateMovementImpulse } from '../utils/physics';
 import { useFrame } from '@react-three/fiber';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCommand, setPlayerPosition } from '../store';
+import { ShotVector } from '../utils/playerLim';
 
 const Player = () => {
     const dispatch = useDispatch();
     const command = useSelector((state) => state.command);
+    const playerPosition = useSelector(state => state.playerPosition);
+    const ballPosition = useSelector(state => state.ballPosition);
     const playerRef = useRef();
     
     const executeCommand = (cmd) => {
         if (typeof cmd === 'string') {
             let directions = { forward: false, backward: false, left: false, right: false };
+            let actions = { action: false, shoot: false, dribble: false };
 
             switch (cmd.toLowerCase()) {
                 case "up":
@@ -28,16 +32,40 @@ const Player = () => {
                 case "right":
                     directions.right = true;
                     break;
+                case "shoot":
+                    actions.action = true;
+                    actions.shoot = true;
+                    playerRef.current.name = "shooter";
+                    break;
+                case "dribble":
+                    actions.action = true;
+                    actions.dribble = true;
+                    playerRef.current.name = "dribbler";
+                    break;
                 default:
                     console.error(`Unexpected command: ${cmd}`);
                     return;
             }
 
-            try {
-                const impulse = calculateMovementImpulse(directions, 0.5, 7.5, playerRef);
+            if (actions.action) {
+                let param = 1;
+                switch (actions) {
+                    case actions.shoot:
+                        param = 100;
+                    case actions.dribble:
+                        param = 1;
+                }
+
+                let impulse = ShotVector(playerPosition, ballPosition, param);
                 playerRef.current.applyImpulse(impulse, true);
-            } catch (error) {
-                console.log(error);
+            }
+            else {
+                try {
+                    const impulse = calculateMovementImpulse(directions, 1.0, 10.5, playerRef);
+                    playerRef.current.applyImpulse(impulse, true);
+                } catch (error) {
+                    console.log(error);
+                }
             }
         } else {
             console.log('Command must be a string');
