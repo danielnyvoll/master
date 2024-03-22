@@ -8,7 +8,7 @@ const scenariosSlice = createSlice({
     list: [
       { name: 'Match', objects: [] },
       { name: 'Basic Shot', objects: [] },
-      // ... other scenarios
+
     ],
   },
   reducers: {
@@ -33,6 +33,13 @@ const scenariosSlice = createSlice({
   },
 });
 
+const modelSlice = createSlice({
+  name: 'model',
+  initialState: 'q-learning',
+  reducers: {
+    setModel: (state, action) => action.payload,
+  },
+});
 
 const commandSlice = createSlice({
   name: 'command',
@@ -89,6 +96,7 @@ export const store = configureStore({
     goal: goalSlice.reducer,
     reset: resetSlice.reducer,
     scenarios: scenariosSlice.reducer,
+    model : modelSlice.reducer,
   },
 });
 
@@ -100,3 +108,4 @@ export const { setPlayerPosition } = playerPositionSlice.actions;
 export const { setBallPosition } = ballPositionSlice.actions;
 export const { setReset } = resetSlice.actions;
 export const { setCurrentScenarioIndex, updateScenarioObjects, addScenario, updateObjectPosition } = scenariosSlice.actions;
+export const { setModel } = modelSlice.actions;

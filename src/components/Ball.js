@@ -5,7 +5,7 @@ import { useFrame } from '@react-three/fiber';
 import { useDispatch, useSelector } from 'react-redux';
 import { setBallPosition } from '../store';
 
-const Ball = ({ onGoalScored }) => {
+const Ball = ({ position }) => {
     const dispatch = useDispatch();
     const isGoal = useSelector(state => state.goal.intersecting);
     const ballRef = useRef();
@@ -33,7 +33,7 @@ const Ball = ({ onGoalScored }) => {
     
 
     return (
-        <RigidBody position={[0, 2, 10]} colliders={"ball"} name="ball" ref={ballRef} restitution={1.2} friction={5.2}>
+        <RigidBody position={position} colliders={"ball"} name="ball" ref={ballRef} restitution={1.2} friction={5.2}>
             <Sphere args={[0.3]}>
                 <meshStandardMaterial color="hotpink" />
             </Sphere>
