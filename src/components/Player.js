@@ -2,10 +2,11 @@ import React, { useRef } from 'react';
 import { Box } from "@react-three/drei";
 import { RigidBody } from "@react-three/rapier";
 import { calculateMovementImpulse } from '../utils/physics';
-import { useFrame } from '@react-three/fiber';
+import { useFrame, useThree } from '@react-three/fiber';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCommand, setPlayerPosition } from '../store';
 import { ShotVector } from '../utils/playerLim';
+import * as THREE from 'three';
 
 const Player = () => {
     const dispatch = useDispatch();
@@ -74,8 +75,25 @@ const Player = () => {
     };
     executeCommand(command);
 
+    useThree((state) => {
+
+        if (playerRef.current) {
+            const { x, y, z } = playerRef.current.translation();
+            const playervec = new THREE.Vector3(x, y, z);
+            const ballvec = new THREE.Vector3(ballPosition.x, ballPosition.y, ballPosition.z);
+
+            state.camera.lookAt(ballvec);
+        
+            state.camera.position.x = x;
+            state.camera.position.y = y + 2;
+            state.camera.position.z = z;
+
+            state.camera.updateProjectionMatrix()
+        }
+    });
 
     useFrame((_state, delta) => {
+
         if (playerRef.current) {
             try {
                 const { x, y, z } = playerRef.current.translation();

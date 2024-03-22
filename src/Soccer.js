@@ -1,6 +1,6 @@
 // Soccer.js
 import React, { Suspense, useState, useEffect } from 'react';
-import { Canvas } from '@react-three/fiber';
+import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { Physics } from '@react-three/rapier';
 import Player from './components/Player';
@@ -8,6 +8,8 @@ import Ball from './components/Ball';
 import Field from './components/Field';
 import Goal from './components/Goal';
 import { useSendCombinedPositions } from './socket/State';
+import { useSelector } from 'react-redux';
+import { useThree } from '@react-three/fiber';
 
 const Soccer = () => {
     useSendCombinedPositions();
@@ -28,11 +30,23 @@ const Soccer = () => {
     key={resetCount}
     */
 
+    const playerPosition = useSelector(state => state.playerPosition);
+
+    const cameraPosition = [
+        0,
+        40,
+        -20
+    ]
+
+    const cameraRotation = [
+        0, 0, 0
+    ]
+
     return (
         <Canvas
             
             style={{ width: '100vw', height: '100vh', position: 'absolute', top: 0, left: 0 }}
-            camera={{ position: [0, 10, 20] }}
+            camera={{ position: cameraPosition, rotation : cameraRotation}}
         >
             <ambientLight intensity={0.5} />
             <directionalLight position={[-10, 10, 0]} intensity={0.4} />
@@ -43,12 +57,6 @@ const Soccer = () => {
                     <Ball/>
                     <Goal rotation={[0, -Math.PI / 2, 0]} position={[-121 / 2, 2.44 / 2+2, 0]}  />
                     <Goal rotation={[0, Math.PI / 2, 0]} position={[121 / 2, 2.44 / 2+2, 0]}  />
-                    <OrbitControls
-                        enableKeys={true}
-                        enablePan={true}
-                        enableZoom={true}
-                        enableRotate={true}
-                    />
                     <Field />
                 </Physics>
             </Suspense>
