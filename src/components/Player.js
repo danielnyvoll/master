@@ -73,17 +73,19 @@ const Player = () => {
 
                 const camerapos = new THREE.Vector3(ballPosition.x, ballPosition.y, ballPosition.z);
 
-                let forwardVector = camerapos.add(new THREE.Vector3(1, 0, 0));
-
-                if (move.backward) {
-                    forwardVector = camerapos.add(new THREE.Vector3(-1, 0, 0));
-                }
+                const forwardVector = camerapos.add(new THREE.Vector3(1, 0, 0));
 
                 const rotatedDirection = forwardVector.clone().applyQuaternion(rotationQuaternion);
 
-                const movementVec = new THREE.Vector3(rotatedDirection.x, 0, rotatedDirection.z);
+                let movementVec = new THREE.Vector3(rotatedDirection.x, 0, rotatedDirection.z);
 
-                playerRef.current.applyImpulse(movementVec, true);
+                if (move.backward) {
+                    movementVec =new THREE.Vector3(-rotatedDirection.x, 0, -rotatedDirection.z);
+                }
+
+                const impulse = calculateMovementImpulse(movementVec, 12.5, playerRef);
+
+                playerRef.current.applyImpulse(impulse, true);
             }
             else if (turn.turn) {
                 let rotationvec = {x: 0, y: 5, z: 0};
@@ -127,6 +129,8 @@ const Player = () => {
     useFrame((_state, delta) => {
 
         if (playerRef.current) {
+
+            playerRef.current.setAngvel(new THREE.Vector3(0, playerRef.current.angvel().y, 0), true);
 
             try {
                 const { x, y, z } = playerRef.current.translation();

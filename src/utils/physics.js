@@ -12,25 +12,12 @@ export const calculateKickImpulse = (kickerRef, ballRef, kickStrength = 2.0) => 
     return direction;
 };
 
-export const calculateMovementImpulse = (directions, acceleration = 17.5, maxSpeed = 17.5, playerRef) => {
+export const calculateMovementImpulse = (direction, maxSpeed = 12.5, playerRef) => {
     if (!playerRef.current) {
         return { x: 0, y: 0, z: 0 };
     }
 
-    let impulse = vec3({ x: 0, y: 0, z: 0 });
-
-    if (directions.right) {
-        impulse = impulse.add({ x: 0, y: 0, z: -acceleration });
-    }
-    if (directions.left) {
-        impulse = impulse.add({ x: 0, y: 0, z: acceleration });
-    }
-    if (directions.forward) {
-        impulse = impulse.add({ x: -acceleration, y: 0, z: 0 });
-    }
-    if (directions.backward) {
-        impulse = impulse.add({ x: acceleration, y: 0, z: 0 });
-    }
+    let impulse = direction;
 
     let currentVelocity = vec3(playerRef.current.linvel());
     let currentSpeed = currentVelocity.length();
