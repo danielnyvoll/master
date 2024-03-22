@@ -38,15 +38,11 @@ const Soccer = () => {
         -20
     ]
 
-    const cameraRotation = [
-        0, 0, 0
-    ]
-
     return (
         <Canvas
             
             style={{ width: '100vw', height: '100vh', position: 'absolute', top: 0, left: 0 }}
-            camera={{ position: cameraPosition, rotation : cameraRotation}}
+            camera={{ position: cameraPosition}}
         >
             <ambientLight intensity={0.5} />
             <directionalLight position={[-10, 10, 0]} intensity={0.4} />

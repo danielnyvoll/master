@@ -14,24 +14,30 @@ const Player = () => {
     const playerPosition = useSelector(state => state.playerPosition);
     const ballPosition = useSelector(state => state.ballPosition);
     const playerRef = useRef();
+    var rotation = 0;
     
     const executeCommand = (cmd) => {
         if (typeof cmd === 'string') {
-            let directions = { forward: false, backward: false, left: false, right: false };
+            let move = { move: false, forward: false };
+            let turn = { turn : false, left: false, right: false};
             let actions = { action: false, shoot: false, dribble: false };
 
             switch (cmd.toLowerCase()) {
                 case "up":
-                    directions.forward = true;
+                    move.move = true;
+                    move.forward = true;
                     break;
                 case "down":
-                    directions.backward = true;
+                    move.move = true;
+                    move.backward = true;
                     break;
                 case "left":
-                    directions.left = true;
+                    turn.turn = true;
+                    turn.left = true;
                     break;
                 case "right":
-                    directions.right = true;
+                    turn.turn = true;
+                    turn.right = true;
                     break;
                 case "shoot":
                     actions.action = true;
@@ -60,13 +66,31 @@ const Player = () => {
                 let impulse = ShotVector(playerPosition, ballPosition, param);
                 playerRef.current.applyImpulse(impulse, true);
             }
-            else {
-                try {
-                    const impulse = calculateMovementImpulse(directions, 1.0, 10.5, playerRef);
-                    playerRef.current.applyImpulse(impulse, true);
-                } catch (error) {
-                    console.log(error);
+            else if (move.move) {
+
+
+                const rotationQuaternion = new THREE.Quaternion(playerRef.current.rotation().x, playerRef.current.rotation().y, playerRef.current.rotation().z, playerRef.current.rotation().w);
+
+                const camerapos = new THREE.Vector3(ballPosition.x, ballPosition.y, ballPosition.z);
+
+                let forwardVector = camerapos.add(new THREE.Vector3(1, 0, 0));
+
+                if (move.backward) {
+                    forwardVector = camerapos.add(new THREE.Vector3(-1, 0, 0));
                 }
+
+                const rotatedDirection = forwardVector.clone().applyQuaternion(rotationQuaternion);
+
+                const movementVec = new THREE.Vector3(rotatedDirection.x, 0, rotatedDirection.z);
+
+                playerRef.current.applyImpulse(movementVec, true);
+            }
+            else if (turn.turn) {
+                let rotationvec = {x: 0, y: 5, z: 0};
+                if (turn.right) {
+                    rotationvec = {x: 0, y: -5, z: 0};
+                }
+                playerRef.current.setAngvel(rotationvec, true);
             }
         } else {
             console.log('Command must be a string');
@@ -78,11 +102,19 @@ const Player = () => {
     useThree((state) => {
 
         if (playerRef.current) {
-            const { x, y, z } = playerRef.current.translation();
-            const playervec = new THREE.Vector3(x, y, z);
-            const ballvec = new THREE.Vector3(ballPosition.x, ballPosition.y, ballPosition.z);
 
-            state.camera.lookAt(ballvec);
+            const { x, y, z } = playerRef.current.translation();
+
+            const rotationQuaternion = new THREE.Quaternion(playerRef.current.rotation().x, playerRef.current.rotation().y, playerRef.current.rotation().z, playerRef.current.rotation().w);
+
+            const camerapos = new THREE.Vector3(ballPosition.x, ballPosition.y + 1, ballPosition.z);
+
+            const forwardVector = camerapos.add(new THREE.Vector3(1, 0, 0));
+
+            const rotatedDirection = forwardVector.clone().applyQuaternion(rotationQuaternion);
+
+
+            state.camera.lookAt(rotatedDirection);
         
             state.camera.position.x = x;
             state.camera.position.y = y + 2;
@@ -95,6 +127,7 @@ const Player = () => {
     useFrame((_state, delta) => {
 
         if (playerRef.current) {
+
             try {
                 const { x, y, z } = playerRef.current.translation();
                 dispatch(setPlayerPosition({ x, y, z }));
@@ -105,7 +138,7 @@ const Player = () => {
     });
 
     return (
-        <RigidBody position={[3, 1, 0]} name="player" ref={playerRef} lockRotations={true}>
+        <RigidBody position={[3, 1, 0]} name="player" ref={playerRef} >
             <Box args={[1, 1, 1]}>
                 <meshStandardMaterial />
             </Box>
