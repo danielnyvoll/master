@@ -80,10 +80,15 @@ const Player = ( {position}) => {
 
         if (playerRef.current) {
             const { x, y, z } = playerRef.current.translation();
-            const playervec = new THREE.Vector3(x, y, z);
-            const ballvec = new THREE.Vector3(ballPosition.x, ballPosition.y, ballPosition.z);
 
-            state.camera.lookAt(ballvec);
+            const rotationQuaternion = new THREE.Quaternion(playerRef.current.rotation().x, playerRef.current.rotation().y, playerRef.current.rotation().z, playerRef.current.rotation().w);
+
+            const camerapos = new THREE.Vector3(ballPosition.x, ballPosition.y + 1, ballPosition.z);
+
+            const forwardVector = camerapos.add(new THREE.Vector3(1, 0, 0));
+
+            const rotatedDirection = forwardVector.clone().applyQuaternion(rotationQuaternion);
+            state.camera.lookAt(rotatedDirection);
         
             state.camera.position.x = x;
             state.camera.position.y = y + 2;

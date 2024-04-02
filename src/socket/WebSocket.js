@@ -46,7 +46,7 @@ export const useWebSocket = () => {
                 ballPosition,
                 isGoal
             });}
-    }, []);
+    }, [playerPosition, ballPosition, isGoal]);
 
     return { sendPositions, sendCanvasImage };
 };

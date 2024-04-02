@@ -21,11 +21,12 @@ const CanvasSnapshot = () => {
 
     useFrame(({ clock }) => {
         const elapsedTime = clock.getElapsedTime() * 1000; // Convert to milliseconds
-        if (elapsedTime - snapshotTimer.current >= snapshotInterval) {
+        if (elapsedTime - snapshotTimer.current >= 100) { // Check if 100 ms have passed
             sendSnapshot();
-            snapshotTimer.current = elapsedTime; // Reset timer
+            snapshotTimer.current = elapsedTime; // Reset timer to current time
         }
     });
+    
 
     return null; // This component does not render anything itself
 };
