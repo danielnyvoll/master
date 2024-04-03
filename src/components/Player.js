@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import { Box } from "@react-three/drei";
 import { RigidBody } from "@react-three/rapier";
 import { calculateMovementImpulse } from '../utils/physics';
@@ -18,21 +18,26 @@ const Player = ( {position}) => {
     
     const executeCommand = (cmd) => {
         if (typeof cmd === 'string') {
-            let directions = { forward: false, backward: false, left: false, right: false };
+            let move = { move: false, forward: false };
+            let turn = { turn : false, left: false, right: false};
             let actions = { action: false, shoot: false, dribble: false };
 
             switch (cmd.toLowerCase()) {
                 case "up":
-                    directions.forward = true;
+                    move.move = true;
+                    move.forward = true;
                     break;
                 case "down":
-                    directions.backward = true;
+                    move.move = true;
+                    move.backward = true;
                     break;
                 case "left":
-                    directions.left = true;
+                    turn.turn = true;
+                    turn.left = true;
                     break;
                 case "right":
-                    directions.right = true;
+                    turn.turn = true;
+                    turn.right = true;
                     break;
                 case "shoot":
                     actions.action = true;
@@ -61,13 +66,34 @@ const Player = ( {position}) => {
                 let impulse = ShotVector(playerPosition, ballPosition, param);
                 playerRef.current.applyImpulse(impulse, true);
             }
-            else {
-                try {
-                    const impulse = calculateMovementImpulse(directions, 1.0, 10.5, playerRef);
-                    playerRef.current.applyImpulse(impulse, true);
-                } catch (error) {
-                    console.log(error);
+            else if (move.move) {
+
+                const { x, y, z } = playerRef.current.translation();
+
+                const rotationQuaternion = new THREE.Quaternion(playerRef.current.rotation().x, playerRef.current.rotation().y, playerRef.current.rotation().z, playerRef.current.rotation().w);
+
+                const camerapos = new THREE.Vector3(x, y, z);
+
+                const forwardVector = camerapos.add(new THREE.Vector3(1, 0, 0));
+
+                const rotatedDirection = forwardVector.clone().applyQuaternion(rotationQuaternion);
+
+                let movementVec = new THREE.Vector3(rotatedDirection.x, 0, rotatedDirection.z);
+
+                if (move.backward) {
+                    movementVec =new THREE.Vector3(-rotatedDirection.x, 0, -rotatedDirection.z);
                 }
+
+                const impulse = calculateMovementImpulse(movementVec, 12.5, playerRef);
+
+                playerRef.current.applyImpulse(impulse, true);
+            }
+            else if (turn.turn) {
+                let rotationvec = {x: 0, y: 5, z: 0};
+                if (turn.right) {
+                    rotationvec = {x: 0, y: -5, z: 0};
+                }
+                playerRef.current.setAngvel(rotationvec, true);
             }
         } else {
             console.log('Command must be a string');
@@ -83,7 +109,7 @@ const Player = ( {position}) => {
 
             const rotationQuaternion = new THREE.Quaternion(playerRef.current.rotation().x, playerRef.current.rotation().y, playerRef.current.rotation().z, playerRef.current.rotation().w);
 
-            const camerapos = new THREE.Vector3(ballPosition.x, ballPosition.y + 1, ballPosition.z);
+            const camerapos = new THREE.Vector3(x, y + 1, z);
 
             const forwardVector = camerapos.add(new THREE.Vector3(1, 0, 0));
 

@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { RigidBody } from '@react-three/rapier';
+import { RigidBody, vec3 } from '@react-three/rapier';
 import { Sphere } from "@react-three/drei";
 import { useFrame } from '@react-three/fiber';
 import { useDispatch, useSelector } from 'react-redux';
@@ -30,10 +30,24 @@ const Ball = ({ position }) => {
             ballRef.current.setAngvel({ x: 0, y: 0, z: 0 }, true); 
         }
     }, [isGoal]);
-    
+
+    const kick = (shootertrans) => {
+
+        let shooterpos = vec3(shootertrans);
+        let ballpos = vec3(ballRef.current.translation());
+        let direction = ballpos.sub(shooterpos).normalize().multiplyScalar(2.0);
+
+        ballRef.current.applyImpulse(direction, true);
+    };
 
     return (
-        <RigidBody position={position} colliders={"ball"} name="ball" ref={ballRef} restitution={1.2} friction={5.2}>
+        <RigidBody position={position} colliders={"ball"} name="ball" ref={ballRef} restitution={1.2} friction={5.2}
+        onCollisionEnter={({other}) => {
+            if(other.rigidBody.name === "shooter") {
+                kick(other.rigidBody.translation);
+            }
+        }}
+        >
             <Sphere args={[0.3]}>
                 <meshStandardMaterial color="hotpink" />
             </Sphere>
