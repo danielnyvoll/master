@@ -34,7 +34,7 @@ const Soccer = () => {
                     <Goal rotation={[0, -Math.PI / 2, 0]} position={[-121 / 2, 2.44 / 2, 0]} />
                     <Goal rotation={[0, Math.PI / 2, 0]} position={[121 / 2, 2.44 / 2, 0]} />
                     <Field />
-                    <OrbitControls enablePan={true} enableZoom={true} enableRotate={true} />
+                    
                 </Physics>
             </Suspense>
             <CanvasSnapshot />

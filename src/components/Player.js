@@ -17,7 +17,7 @@ const Player = ( {position}) => {
     const playerRef = useRef();
     
     const executeCommand = (cmd) => {
-        if (typeof cmd === 'string') {
+        if (typeof cmd === 'string' && playerRef.current) {
             let move = { move: false, forward: false };
             let turn = { turn : false, left: false, right: false};
             let actions = { action: false, shoot: false, dribble: false };
@@ -55,6 +55,9 @@ const Player = ( {position}) => {
             }
 
             if (actions.action) {
+
+                playerRef.current.setAngvel({x: 0, y: 0, z:0}, true);
+
                 let param = 1;
                 switch (actions) {
                     case actions.shoot:
@@ -68,21 +71,27 @@ const Player = ( {position}) => {
             }
             else if (move.move) {
 
+                playerRef.current.setAngvel({x: 0, y: 0, z:0}, true);
+
                 const { x, y, z } = playerRef.current.translation();
 
                 const rotationQuaternion = new THREE.Quaternion(playerRef.current.rotation().x, playerRef.current.rotation().y, playerRef.current.rotation().z, playerRef.current.rotation().w);
 
-                const camerapos = new THREE.Vector3(x, y, z);
+                const forwardVector = new THREE.Vector3(1, 0, 0).applyQuaternion(rotationQuaternion);
 
-                const forwardVector = camerapos.add(new THREE.Vector3(1, 0, 0));
+                //const camerapos = new THREE.Vector3(x, y, z);
 
-                const rotatedDirection = forwardVector.clone().applyQuaternion(rotationQuaternion);
+                //const forwardVector = camerapos.add(new THREE.Vector3(1, 0, 0));
+                
+                //const rotatedDirection = forwardVector.clone().applyQuaternion(rotationQuaternion);
 
-                let movementVec = new THREE.Vector3(rotatedDirection.x, 0, rotatedDirection.z);
+                let movementVec = new THREE.Vector3(forwardVector.x, 0, forwardVector.z);
 
                 if (move.backward) {
-                    movementVec =new THREE.Vector3(-rotatedDirection.x, 0, -rotatedDirection.z);
+                    movementVec =new THREE.Vector3(-forwardVector.x, 0, -forwardVector.z);
                 }
+
+                movementVec = movementVec.multiplyScalar(10);
 
                 const impulse = calculateMovementImpulse(movementVec, 12.5, playerRef);
 
@@ -111,13 +120,20 @@ const Player = ( {position}) => {
 
             const camerapos = new THREE.Vector3(x, y + 1, z);
 
-            const forwardVector = camerapos.add(new THREE.Vector3(1, 0, 0));
+            const forwardVector = new THREE.Vector3(1, 0, 0).applyQuaternion(rotationQuaternion);
 
-            const rotatedDirection = forwardVector.clone().applyQuaternion(rotationQuaternion);
+
+            //const forwardVector = camerapos.add(new THREE.Vector3(1, 0, 0));
+
+            //const rotatedDirection = forwardVector.clone().applyQuaternion(rotationQuaternion);
+
+            const rotatedDirection = camerapos.add(forwardVector);
+
+
             state.camera.lookAt(rotatedDirection);
         
             state.camera.position.x = x;
-            state.camera.position.y = y + 2;
+            state.camera.position.y = y + 1.5;
             state.camera.position.z = z;
 
             state.camera.updateProjectionMatrix()
