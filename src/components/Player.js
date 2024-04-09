@@ -129,12 +129,17 @@ const Player = ( {position}) => {
 
             const rotatedDirection = camerapos.add(forwardVector);
 
+            const middle = new THREE.Vector3(0,0,0);
 
-            state.camera.lookAt(rotatedDirection);
+            state.camera.lookAt(middle);
         
-            state.camera.position.x = x;
-            state.camera.position.y = y + 1.5;
-            state.camera.position.z = z;
+            //state.camera.position.x = x;
+            //state.camera.position.y = y + 1.5;
+            //state.camera.position.z = z;
+
+            state.camera.position.x = 0;
+            state.camera.position.y = 50;
+            state.camera.position.z = 20;
 
             state.camera.updateProjectionMatrix()
         }
