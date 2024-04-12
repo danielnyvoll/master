@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react';
 import io from 'socket.io-client';
 import { useDispatch, useSelector } from 'react-redux';
-import { setCommand, setReset } from '../store';
+import { setCommand, setNext, setReset, setReward } from '../store';
 const wsUrl = 'http://127.0.0.1:5000';
 
 export const useWebSocket = () => {
@@ -10,6 +10,7 @@ export const useWebSocket = () => {
     const playerPosition = useSelector(state => state.playerPosition);
     const ballPosition = useSelector(state => state.ballPosition);
     const isGoal = useSelector(state => state.goal);
+    const start = useSelector(state => state.start); 
 
     useEffect(() => {
       socket.current = io(wsUrl, { transports: ['websocket'] });
@@ -17,12 +18,21 @@ export const useWebSocket = () => {
           console.log(command);
           dispatch(setCommand(command));
       });
-
+      socket.current.on('reward', (reward) => {
+        console.log(reward);
+        dispatch(setReward(reward));
+    });
       socket.current.on('reset', (response) => {
         if (response) {
             console.log('Received reset:', response);
-            dispatch(setReset(response))
-            dispatch(setReset(false))
+            dispatch(setReset(response));
+            dispatch(setReset(false));
+        }
+    });
+    socket.current.on('next', (next) => {
+        if(next){
+            dispatch(setNext(next));
+            dispatch(setNext(false));
         }
     });
   
@@ -39,7 +49,9 @@ export const useWebSocket = () => {
     }, []);
 
     const sendCanvasImage = useCallback((imageBase64) => {
-        if (socket.current.connected) {
+        
+        if (socket.current.connected && start) {
+            console.log(start);
             socket.current.emit('send_image', {
                 image: imageBase64,
                 playerPosition,

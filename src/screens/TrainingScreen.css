@@ -7,6 +7,7 @@
 }
   
 .button {
+    margin-top: 20px;
     border: none;
     padding: 10px 20px;
     text-align: center;
@@ -17,6 +18,7 @@
     cursor: pointer;
     outline: none;
     flex: 1; /* This will make buttons expand equally to fill the parent container */
+    margin-right: 15px;
 }
   
 /* Style for the red button */
@@ -39,6 +41,7 @@
     color: white;
     border-top-right-radius: 30px;
     border-bottom-right-radius: 30px;
+    
 }
 
 .button.green:hover,
@@ -50,20 +53,111 @@
 .button:focus {
     outline: none;
 }
-table {
-    margin-left: 15%;
-    margin-top: 2%;
-    margin-bottom: 1%;
-    border-collapse: collapse;
+
+  
+  .model-selection {
+    display: flex;
+    align-items: center;
   }
   
-  th, td {
-    text-align: left;
-    padding: 8px;
-    border: 1px solid #ddd;
+  .model-option {
+    display: flex;
+    align-items: center;
+    margin-right: 20%; 
   }
   
-  th {
-    background-color: #f2f2f2;
+  .hidden-radio {
+    display: none; 
+  }
+  .model-selection{
+    margin-left: 20%;
+  }
+  .model-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+    white-space: nowrap;
+  }
+  .info-component {
+    display: flex;
+    flex-direction: column; /* Assuming you want to stack children vertically */
+    align-items: center; /* Centers children horizontally */
+    justify-content: center; /* Adjusts distribution of children if needed */
+}
+
+.model-selection {
+    text-align: center; /* Center text within each label if needed */
+    font-size: 20px; /* Increases the font size for the text inside the model-selection */
+    margin: 0 auto; /* Center the div if flex properties don't apply as expected */
+}
+
+.model-label {
+    font-size: 20px; /* Increase the font size here if model-selection doesn't apply directly */
+    margin: 10px 0; /* Adjust margin for better spacing if needed */
+}
+
+  
+  .checkmark {
+    color: green;
+    margin-left: 5px;
+    font-size: 1.2em;
   }
   
+  .hidden-radio:checked + .model-label {
+    color: green;
+    font-weight: bold;
+  }
+
+
+.info-icon {
+  width: 2%;
+  margin-left: 1%;
+  margin-bottom: 1%;
+  cursor: pointer; 
+}
+
+.info-text {
+  display: inline-block;
+  position: absolute;
+  z-index: 1;
+  width: 200px;
+  background-color: #f9f9f9;
+  color: #333;
+  text-align: center;
+  border-radius: 4px;
+  padding: 2%;
+  margin-top: 1%; 
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2); 
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s, visibility 0.3s;
+}
+
+.info-icon:hover + .info-text {
+  visibility: visible;
+  opacity: 1;
+}
+
+.training-screen .info-component .model-selection {
+    margin-bottom: 20px; /* Adjust spacing as needed */
+  }
+  
+  /* Additional styles omitted for brevity, assuming existing styles remain unchanged */
+  
+  .model-selection .model-label {
+    margin-right: 20px; /* Ensures spacing between the labels */
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .hidden-radio {
+    display: none;
+  }
+  
+  .checkmark {
+    color: green;
+    margin-left: 5px;
+    font-size: 1.2em;
+  }

@@ -29,7 +29,14 @@ const scenariosSlice = createSlice({
       if (objectIndex !== -1) {
         scenario.objects[objectIndex].position = newPosition;
       }
-    }
+    },
+    incrementScenarioIndex: (state) => {
+      const nextIndex = state.currentScenarioIndex + 1;
+      // Ensure we don't exceed the list's bounds
+      if (nextIndex < state.list.length) {
+        state.currentScenarioIndex = nextIndex;
+      }
+    },
   },
 });
 
@@ -65,7 +72,13 @@ const playerPositionSlice = createSlice({
     setPlayerPosition: (state, action) => action.payload,
   },
 });
-
+const rewardSlice = createSlice({
+  name: 'reward',
+  initialState: 0,
+  reducers:{
+    setReward: (state, action) => action.payload,
+  }
+});
 // Ball position slice
 const ballPositionSlice = createSlice({
   name: 'ballPosition',
@@ -87,6 +100,22 @@ const goalSlice = createSlice({
     }
 });
 
+const startSlice = createSlice({
+  name: 'start',
+  initialState: false, // Directly using a boolean value for the initial state
+  reducers: {
+    setStart: (state, action) => action.payload, // Payload directly updates the state
+  }
+});
+
+const nextSlice = createSlice({
+  name: 'next',
+  initialState: false, // Directly using a boolean value for the initial state
+  reducers: {
+    setNext: (state, action) => action.payload, // Payload directly updates the state
+  }
+});
+
 // Configure the store
 export const store = configureStore({
   reducer: {
@@ -97,15 +126,21 @@ export const store = configureStore({
     reset: resetSlice.reducer,
     scenarios: scenariosSlice.reducer,
     model : modelSlice.reducer,
+    reward : rewardSlice.reducer,
+    start: startSlice.reducer,
+    next: nextSlice.reducer,
   },
 });
 
 
 // Export actions
+export const { setNext } = nextSlice.actions;
+export const { setStart } = startSlice.actions;
 export const { setGoal } = goalSlice.actions;
 export const { setCommand } = commandSlice.actions;
 export const { setPlayerPosition } = playerPositionSlice.actions;
 export const { setBallPosition } = ballPositionSlice.actions;
 export const { setReset } = resetSlice.actions;
-export const { setCurrentScenarioIndex, updateScenarioObjects, addScenario, updateObjectPosition } = scenariosSlice.actions;
+export const { setCurrentScenarioIndex, updateScenarioObjects, addScenario, updateObjectPosition, incrementScenarioIndex } = scenariosSlice.actions;
 export const { setModel } = modelSlice.actions;
+export const { setReward } = rewardSlice.actions;

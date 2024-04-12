@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
+import { useSelector } from 'react-redux';
 
-// Register the chart components
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -14,18 +14,21 @@ ChartJS.register(
 );
 
 const LiveLineGraph = () => {
-  // Initial state for the chart data
+  const reward = useSelector(state => state.reward);
+  const [cumulativeReward, setCumulativeReward] = useState(0);
+  const [episode, setEpisode] = useState(0);
+
   const [chartData, setChartData] = useState({
-    labels: Array.from({length: 500}, (_, i) => i + 1), // Generate labels from 1 to 500
+    labels: [],
     datasets: [
       {
-        label: 'Reward',
+        label: 'Reward per Episode',
         data: [],
         borderColor: 'rgb(255, 99, 132)',
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
       },
       {
-        label: 'Goals Scored',
+        label: 'Total Reward',
         data: [],
         borderColor: 'rgb(53, 162, 235)',
         backgroundColor: 'rgba(53, 162, 235, 0.5)',
@@ -33,30 +36,27 @@ const LiveLineGraph = () => {
     ],
   });
 
-  // Function to add data to the graph
-  const addData = (episode, reward, goalScored) => {
-    setChartData((prevData) => {
-      const dataCopy = { ...prevData };
-      if (dataCopy.datasets[0].data.length < 500) { // Ensure we're not adding beyond 500 episodes
-        dataCopy.datasets[0].data[episode - 1] = reward;
-        dataCopy.datasets[1].data[episode - 1] = goalScored;
-      }
-      return dataCopy;
-    });
-  };
-
-  // Simulate adding data every 2 seconds for demonstration
   useEffect(() => {
-    const interval = setInterval(() => {
-      const episode = chartData.datasets[0].data.length + 1;
-      const reward = Math.floor(Math.random() * 100);
-      const goalScored = Math.floor(Math.random() * 100);
-      if (episode <= 500) {
-        addData(episode, reward, goalScored);
-      }
-    }, 2000);
-    return () => clearInterval(interval);
-  }, [chartData]);
+
+    setEpisode((prevEpisode) => prevEpisode + 1);
+   
+    setCumulativeReward((prevTotal) => prevTotal + reward);
+
+    
+    setChartData((prevData) => ({
+      ...prevData,
+      labels: [...prevData.labels, `Episode ${episode + 1}`], 
+      datasets: prevData.datasets.map((dataset) => {
+        if (dataset.label === 'Reward per Episode') {
+
+          return { ...dataset, data: [...dataset.data, reward] };
+        } else if (dataset.label === 'Total Reward') {
+          return { ...dataset, data: [...dataset.data, cumulativeReward + reward] };
+        }
+        return dataset;
+      }),
+    }));
+  }, [reward]);
 
   return <Line data={chartData} />;
 };
