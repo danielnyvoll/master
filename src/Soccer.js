@@ -15,6 +15,8 @@ const Soccer = () => {
     const currentScenarioIndex = useSelector((state) => state.scenarios.currentScenarioIndex);
     const currentScenario = useSelector((state) => state.scenarios.list[currentScenarioIndex]);
 
+    var playercount = 0;
+
 
     return (
         <Canvas
@@ -25,7 +27,13 @@ const Soccer = () => {
                     {currentScenario.objects.map((object, index) => {
                         const positionWithAdjustedY = [object.position[0], object.position[1] + 0.1, object.position[2]];
                         switch (object.type) {
-                            case 'Player': return <Player key={index} position={positionWithAdjustedY}/>;
+                            case 'Player':
+                                let color = "lightblue";
+                                if (playercount % 2 == 1) {
+                                    color = "red";
+                                }
+                                playercount ++;
+                                return <Player key={index} position={positionWithAdjustedY} color={color}/>;
                             case 'Ball': return <Ball key={index} position={positionWithAdjustedY} />;
                             case 'Cone': return <Cone key={index} position={positionWithAdjustedY} />;
                             default: return null;
