@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { Box } from "@react-three/drei";
-import { RigidBody } from "@react-three/rapier";
+import { CuboidCollider, RigidBody } from "@react-three/rapier";
 import { calculateMovementImpulse } from '../utils/physics';
 import { useFrame, useThree } from '@react-three/fiber';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,7 +9,7 @@ import { setCommand, setPlayerPosition } from '../store';
 
 import * as THREE from 'three';
 
-const Player = ( {position}) => {
+const Player = ( {position, color}) => {
     const dispatch = useDispatch();
     const command = useSelector((state) => state.command);
     const playerPosition = useSelector(state => state.playerPosition);
@@ -129,12 +129,17 @@ const Player = ( {position}) => {
 
             const rotatedDirection = camerapos.add(forwardVector);
 
+            const middle = new THREE.Vector3(0,0,0);
 
-            state.camera.lookAt(rotatedDirection);
+            state.camera.lookAt(middle);
         
-            state.camera.position.x = x;
-            state.camera.position.y = y + 1.5;
-            state.camera.position.z = z;
+            //state.camera.position.x = x;
+            //state.camera.position.y = y + 1.5;
+            //state.camera.position.z = z;
+
+            state.camera.position.x = 0;
+            state.camera.position.y = 50;
+            state.camera.position.z = 20;
 
             state.camera.updateProjectionMatrix()
         }
@@ -155,7 +160,10 @@ const Player = ( {position}) => {
     return (
         <RigidBody position={position} name="player" ref={playerRef} lockRotations={true}>
             <Box args={[1, 1, 1]}>
-                <meshStandardMaterial />
+                <meshBasicMaterial color={color}/>
+            </Box>
+            <Box args={[0.25, 0.25, 0.5]} position={[0.375, 0.5, 0]}>
+                <meshBasicMaterial color={"blue"}/>
             </Box>
         </RigidBody>
     );
