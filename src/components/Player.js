@@ -1,21 +1,34 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Box } from "@react-three/drei";
 import { CuboidCollider, RigidBody } from "@react-three/rapier";
 import { calculateMovementImpulse } from '../utils/physics';
 import { useFrame, useThree } from '@react-three/fiber';
 import { useDispatch, useSelector } from 'react-redux';
 import { ShotVector } from '../utils/playerLim';
-import { setCommand, setPlayerPosition } from '../store';
+import { setCommand, setPlayerPosition, addPlayer } from '../store';
 
 import * as THREE from 'three';
 
-const Player = ( {position, color}) => {
+const Player = ( {position, color, id}) => {
     const dispatch = useDispatch();
     const command = useSelector((state) => state.command);
     const playerPosition = useSelector(state => state.playerPosition);
     const ballPosition = useSelector(state => state.ballPosition);
     const playerRef = useRef();
-    
+
+
+    useEffect(() => {
+            const newPlayer = {
+                id: id, // Sequential ID
+                x: position[0], // Example position
+                y: position[1],
+                z: position[2],
+                team: color,
+            };
+            dispatch(addPlayer(newPlayer));
+    }, [dispatch]);
+
+
     const executeCommand = (cmd) => {
         if (typeof cmd === 'string' && playerRef.current) {
             let move = { move: false, forward: false };

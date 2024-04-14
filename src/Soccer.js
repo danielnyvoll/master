@@ -1,8 +1,8 @@
-import React, { Suspense, useFrame } from 'react';
+import React, { Suspense, useFrame, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { Physics } from '@react-three/rapier';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Player from './components/Player';
 import Ball from './components/Ball';
 import Field from './components/Field';
@@ -12,9 +12,9 @@ import Cone from './components/Cone';
 import CanvasSnapshot from './utils/CanvasSnapshot';
 
 const Soccer = () => {
+    const scenarios = useSelector((state) => state.scenarios.list);
     const currentScenarioIndex = useSelector((state) => state.scenarios.currentScenarioIndex);
-    const currentScenario = useSelector((state) => state.scenarios.list[currentScenarioIndex]);
-
+    const currentScenario = scenarios[currentScenarioIndex];
     var playercount = 0;
 
 
@@ -33,7 +33,7 @@ const Soccer = () => {
                                     color = "red";
                                 }
                                 playercount ++;
-                                return <Player key={index} position={positionWithAdjustedY} color={color}/>;
+                                return <Player key={index} position={positionWithAdjustedY} color={color} id={playercount}/>;
                             case 'Ball': return <Ball key={index} position={positionWithAdjustedY} />;
                             case 'Cone': return <Cone key={index} position={positionWithAdjustedY} />;
                             default: return null;

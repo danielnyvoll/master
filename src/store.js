@@ -116,6 +116,29 @@ const nextSlice = createSlice({
   }
 });
 
+const stateSlice = createSlice({
+  name: 'gameState',
+  initialState: {
+    players: {},
+  },
+  reducers: {
+
+    addPlayer: (state, action) => {
+      const { id, x, y, z, team } = action.payload;
+      state.players[id] = { x, y, z, team }; // Add player to the players object
+    },
+
+    updatePlayerPosition: (state, action) => {
+      const { id, x, y, z } = action.payload;
+      if (state.players[id]) {
+        state.players[id].x = x;
+        state.players[id].y = y;
+        state.players[id].z = z;
+      }
+    }
+  }
+});
+
 // Configure the store
 export const store = configureStore({
   reducer: {
@@ -129,11 +152,13 @@ export const store = configureStore({
     reward : rewardSlice.reducer,
     start: startSlice.reducer,
     next: nextSlice.reducer,
+    gameState: stateSlice.reducer,
   },
 });
 
 
 // Export actions
+export const { addPlayer, updatePlayerPosition } = stateSlice.actions;
 export const { setNext } = nextSlice.actions;
 export const { setStart } = startSlice.actions;
 export const { setGoal } = goalSlice.actions;

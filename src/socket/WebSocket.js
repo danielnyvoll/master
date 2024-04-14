@@ -8,6 +8,7 @@ export const useWebSocket = () => {
     const dispatch = useDispatch();
     const socket = useRef(null);
     const playerPosition = useSelector(state => state.playerPosition);
+    const gameState = useSelector(state => state.gameState);
     const ballPosition = useSelector(state => state.ballPosition);
     const isGoal = useSelector(state => state.goal);
     const start = useSelector(state => state.start); 
@@ -15,6 +16,7 @@ export const useWebSocket = () => {
     useEffect(() => {
       socket.current = io(wsUrl, { transports: ['websocket'] });
       socket.current.on('command', (command) => {
+        console.log("Mottat kommando:");
           console.log(command);
           dispatch(setCommand(command));
       });
@@ -49,16 +51,14 @@ export const useWebSocket = () => {
     }, []);
 
     const sendCanvasImage = useCallback((imageBase64) => {
-        
-        if (socket.current.connected && start) {
-            console.log(start);
+        if (start) {
             socket.current.emit('send_image', {
                 image: imageBase64,
-                playerPosition,
+                gameState,
                 ballPosition,
                 isGoal
             });}
-    }, [playerPosition, ballPosition, isGoal]);
+    }, [gameState, ballPosition, isGoal]);
 
     return { sendPositions, sendCanvasImage };
 };
