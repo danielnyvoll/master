@@ -22,6 +22,7 @@ export const useWebSocket = () => {
         dispatch(setOppositeCommand(commands.opponent));
       });
       socket.current.on('reward', (reward) => {
+        console.log(reward);
         dispatch(setReward(reward));
       });
       socket.current.on('reset', (response) => {

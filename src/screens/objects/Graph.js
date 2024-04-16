@@ -14,15 +14,20 @@ ChartJS.register(
 );
 
 const LiveLineGraph = () => {
-  const reward = useSelector(state => state.reward);
-  const [cumulativeReward, setCumulativeReward] = useState(0);
+  const rewards = useSelector(state => state.reward);
   const [episode, setEpisode] = useState(0);
 
   const [chartData, setChartData] = useState({
     labels: [],
     datasets: [
       {
-        label: 'Reward per Episode',
+        label: 'Blue Player Reward per Episode',
+        data: [],
+        borderColor: 'rgb(53, 162, 235)',
+        backgroundColor: 'rgba(53, 162, 235, 0.5)',
+      },
+      {
+        label: 'Red Player Reward per Episode',
         data: [],
         borderColor: 'rgb(255, 99, 132)',
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
@@ -30,33 +35,31 @@ const LiveLineGraph = () => {
       {
         label: 'Total Reward',
         data: [],
-        borderColor: 'rgb(53, 162, 235)',
-        backgroundColor: 'rgba(53, 162, 235, 0.5)',
+        borderColor: 'rgb(75, 192, 192)',
+        backgroundColor: 'rgba(75, 192, 192, 0.5)',
       },
     ],
   });
 
   useEffect(() => {
+    setEpisode(prevEpisode => prevEpisode + 1);
 
-    setEpisode((prevEpisode) => prevEpisode + 1);
-   
-    setCumulativeReward((prevTotal) => prevTotal + reward);
-
-    
-    setChartData((prevData) => ({
-      ...prevData,
-      labels: [...prevData.labels, `Episode ${episode + 1}`], 
-      datasets: prevData.datasets.map((dataset) => {
-        if (dataset.label === 'Reward per Episode') {
-
-          return { ...dataset, data: [...dataset.data, reward] };
+    setChartData(prevData => {
+      const newLabels = [...prevData.labels, `Episode ${episode + 1}`];
+      const newDatasets = prevData.datasets.map(dataset => {
+        if (dataset.label === 'Blue Player Reward per Episode') {
+          return { ...dataset, data: [...dataset.data, rewards.blue] };
+        } else if (dataset.label === 'Red Player Reward per Episode') {
+          return { ...dataset, data: [...dataset.data, rewards.red] };
         } else if (dataset.label === 'Total Reward') {
-          return { ...dataset, data: [...dataset.data, cumulativeReward + reward] };
+          return { ...dataset, data: [...dataset.data, rewards.blue + rewards.red] };
         }
         return dataset;
-      }),
-    }));
-  }, [reward]);
+      });
+
+      return { labels: newLabels, datasets: newDatasets };
+    });
+  }, [rewards]);
 
   return <Line data={chartData} />;
 };

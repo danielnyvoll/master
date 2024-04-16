@@ -83,9 +83,19 @@ const playerPositionSlice = createSlice({
 });
 const rewardSlice = createSlice({
   name: 'reward',
-  initialState: 0,
-  reducers:{
-    setReward: (state, action) => action.payload,
+  initialState: {
+    blue: 0,
+    red: 0
+  },
+  reducers: {
+    setReward: (state, action) => {
+      if (action.payload.rewardBlue !== undefined) {
+        state.blue = action.payload.rewardBlue;
+      }
+      if (action.payload.rewardRed !== undefined) {
+        state.red = action.payload.rewardRed;
+      }
+    },
   }
 });
 // Ball position slice
