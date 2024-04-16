@@ -41,6 +41,7 @@ export const useWebSocket = () => {
     }, [dispatch]); 
   
     const sendCanvasImage = useCallback((imageBase64) => {
+        console.log(isGoal);
             socket.current.emit('send_image', {
                 image: imageBase64,
                 playerPosition: playerPosition,

@@ -49,8 +49,8 @@ const Soccer = () => {
                             return null;
                         }
                     })}
-                    <Goal rotation={[0, -Math.PI / 2, 0]} position={[-121 / 2, 2.44 / 2, 0]} />
-                    <Goal rotation={[0, Math.PI / 2, 0]} position={[121 / 2, 2.44 / 2, 0]} />
+                    <Goal rotation={[0, -Math.PI / 2, 0]} position={[-121 / 2, 2.44 / 2, 0]} isBlue={true}/>
+                    <Goal rotation={[0, Math.PI / 2, 0]} position={[121 / 2, 2.44 / 2, 0]} isBlue={false}/>
                     <Field />
                 </Physics>
             </Suspense>

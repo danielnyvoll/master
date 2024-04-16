@@ -108,16 +108,24 @@ const ballPositionSlice = createSlice({
 });
 
 const goalSlice = createSlice({
-    name: 'goal',
-    initialState:{
-        intersecting: false,
-    },
-    reducers: {
-        setGoal: (state, action) => {
-            state.intersecting = action.payload;
-        }
-    }
+  name: 'goal',
+  initialState:{
+      intersecting: false,
+      scoringSide: 0,  // 0 means no score, -1 for blue scoring, 1 for red scoring
+  },
+  reducers: {
+      setGoal: (state, action) => {
+        console.log(action.payload);
+          state.intersecting = action.payload.intersecting;
+          state.scoringSide = action.payload.scoringSide;
+      },
+      resetGoal: (state) => {
+          state.intersecting = false;
+          state.scoringSide = 0;
+      }
+  }
 });
+
 
 const multiplayerSlice = createSlice({
   name: 'multiplayer',
@@ -178,7 +186,7 @@ export const { setOppositeCommand } = commandOppositePlayerSlice.actions;
 export const { setOppositePlayerPosition } = oppositePlayerPositionSlice.actions;
 export const { setNext } = nextSlice.actions;
 export const { setStart } = startSlice.actions;
-export const { setGoal } = goalSlice.actions;
+export const { setGoal, resetGoal } = goalSlice.actions;
 export const { setCommand } = commandSlice.actions;
 export const { setPlayerPosition } = playerPositionSlice.actions;
 export const { setBallPosition } = ballPositionSlice.actions;
