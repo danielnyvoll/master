@@ -15,6 +15,7 @@ const OpponentPlayer = ( {position}) => {
     const playerPosition = useSelector(state => state.oppositePlayerPosition);
     const ballPosition = useSelector(state => state.ballPosition);
     const playerRef = useRef();
+    const isGoal = useSelector(state => state.goal.intersecting);
 
     const executeCommand = (cmd) => {
         if (typeof cmd === 'string' && playerRef.current && cmd != '') {
@@ -156,6 +157,14 @@ const OpponentPlayer = ( {position}) => {
             }
         }
     });
+    useEffect(() => {
+        if (isGoal && playerRef.current) {
+            // Set the ball to the starting position
+            playerRef.current.setTranslation({ x: position[0], y: position[1], z: position[2] }, true);
+            playerRef.current.setLinvel({ x: 0, y: 0, z: 0 }, true);
+            playerRef.current.setAngvel({ x: 0, y: 0, z: 0 }, true); 
+        }
+    }, [isGoal]);
 
     return (
         <RigidBody position={position} name="oppositePlayer" ref={playerRef} lockRotations={true}>

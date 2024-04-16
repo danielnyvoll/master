@@ -17,12 +17,11 @@ export const useWebSocket = () => {
     useEffect(() => {
       socket.current = io(wsUrl, { transports: ['websocket'] });
       socket.current.on('command', (commands) => {
-        console.log("Received commands:", commands);
+
         dispatch(setCommand(commands.player));
         dispatch(setOppositeCommand(commands.opponent));
       });
       socket.current.on('reward', (reward) => {
-        console.log(reward);
         dispatch(setReward(reward));
       });
       socket.current.on('reset', (response) => {

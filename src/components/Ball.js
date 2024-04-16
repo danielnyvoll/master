@@ -25,7 +25,7 @@ const Ball = ({ position }) => {
     useEffect(() => {
         if (isGoal && ballRef.current) {
             // Set the ball to the starting position
-            ballRef.current.setTranslation({ x: 0, y: 5, z: 0 }, true);
+            ballRef.current.setTranslation({ x: position[0], y: position[1], z: position[2] }, true);
             ballRef.current.setLinvel({ x: 0, y: 0, z: 0 }, true);
             ballRef.current.setAngvel({ x: 0, y: 0, z: 0 }, true); 
         }
