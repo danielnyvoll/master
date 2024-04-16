@@ -12,6 +12,7 @@ export const useWebSocket = () => {
     const oppositePlayerPosition = useSelector(state => state.oppositePlayerPosition);
     const ballPosition = useSelector(state => state.ballPosition);
     const isGoal = useSelector(state => state.goal);
+    const isMultiplayer = useSelector(state => state.multiplayer);
 
     useEffect(() => {
       socket.current = io(wsUrl, { transports: ['websocket'] });
@@ -45,7 +46,8 @@ export const useWebSocket = () => {
                 playerPosition: playerPosition,
                 oppositePlayerPosition: oppositePlayerPosition,
                 ballPosition: ballPosition,
-                isGoal: isGoal
+                isGoal: isGoal,
+                isMultiplayer: isMultiplayer,
             });
     }, [playerPosition, oppositePlayerPosition, ballPosition, isGoal]);
 

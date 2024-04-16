@@ -109,6 +109,16 @@ const goalSlice = createSlice({
     }
 });
 
+const multiplayerSlice = createSlice({
+  name: 'multiplayer',
+  initialState: { multiplayer: false },
+  reducers: {
+      setMultiplayer: (state, action) => {
+          state.multiplayer = action.payload;
+      }
+  }
+});
+
 const startSlice = createSlice({
   name: 'start',
   initialState: false, // Directly using a boolean value for the initial state
@@ -147,11 +157,13 @@ export const store = configureStore({
     reward : rewardSlice.reducer,
     start: startSlice.reducer,
     next: nextSlice.reducer,
+    multiplayer : multiplayerSlice.reducer,
   },
 });
 
 
 // Export actions
+export const { setMultiplayer } = multiplayerSlice.actions;
 export const { setOppositeCommand } = commandOppositePlayerSlice.actions;
 export const { setOppositePlayerPosition } = oppositePlayerPositionSlice.actions;
 export const { setNext } = nextSlice.actions;
