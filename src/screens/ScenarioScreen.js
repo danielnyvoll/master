@@ -39,7 +39,6 @@ function ScenarioScreen() {
       const { color, id } = attributes[type];
       const newObject = { type, id, position: newPosition, color };
 
-      // Assuming you have an action to add or update objects in the scenario
       const updatedObjects = [...scenarios[currentScenarioIndex].objects, newObject];
       dispatch(updateScenarioObjects({ scenarioIndex: currentScenarioIndex, objects: updatedObjects }));
     }

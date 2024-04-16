@@ -8,6 +8,7 @@ import Ball from './components/Ball';
 import Field from './components/Field';
 import Goal from './components/Goal';
 import Cone from './components/Cone';
+import OpponentPlayer from './components/OpponentPlayer';
 // Assume CanvasSnapshot is properly imported here
 import CanvasSnapshot from './utils/CanvasSnapshot';
 
@@ -15,7 +16,7 @@ const Soccer = () => {
     const scenarios = useSelector((state) => state.scenarios.list);
     const currentScenarioIndex = useSelector((state) => state.scenarios.currentScenarioIndex);
     const currentScenario = scenarios[currentScenarioIndex];
-    var playercount = 0;
+    var playerCount = 0;
 
 
     return (
@@ -28,12 +29,12 @@ const Soccer = () => {
                         const positionWithAdjustedY = [object.position[0], object.position[1] + 0.1, object.position[2]];
                         switch (object.type) {
                             case 'Player':
-                                let color = "lightblue";
-                                if (playercount % 2 == 1) {
-                                    color = "red";
+                                playerCount++;
+                                if (playerCount % 2 !== 0) {
+                                    return <Player key={index} position={positionWithAdjustedY}/>;
+                                } else {
+                                    return <OpponentPlayer key={index} position={positionWithAdjustedY}/>;
                                 }
-                                playercount ++;
-                                return <Player key={index} position={positionWithAdjustedY} color={color} id={playercount}/>;
                             case 'Ball': return <Ball key={index} position={positionWithAdjustedY} />;
                             case 'Cone': return <Cone key={index} position={positionWithAdjustedY} />;
                             default: return null;

@@ -48,6 +48,15 @@ const modelSlice = createSlice({
   },
 });
 
+const commandOppositePlayerSlice = createSlice({
+  name: 'commandOppositePlayer',
+  initialState: '',
+  reducers: {
+    setOppositeCommand: (state, action) => action.payload,
+  },
+});
+
+
 const commandSlice = createSlice({
   name: 'command',
   initialState: '',
@@ -116,34 +125,20 @@ const nextSlice = createSlice({
   }
 });
 
-const stateSlice = createSlice({
-  name: 'gameState',
-  initialState: {
-    players: {},
-  },
+const oppositePlayerPositionSlice = createSlice({
+  name: 'oppositePlayerPosition',
+  initialState: { x: 0, y: 0, z: 0 },
   reducers: {
-
-    addPlayer: (state, action) => {
-      const { id, x, y, z, team } = action.payload;
-      state.players[id] = { x, y, z, team }; // Add player to the players object
-    },
-
-    updatePlayerPosition: (state, action) => {
-      const { id, x, y, z } = action.payload;
-      if (state.players[id]) {
-        state.players[id].x = x;
-        state.players[id].y = y;
-        state.players[id].z = z;
-      }
-    }
-  }
+    setOppositePlayerPosition: (state, action) => action.payload,
+  },
 });
-
 // Configure the store
 export const store = configureStore({
   reducer: {
     command: commandSlice.reducer,
+    commandOppositePlayer: commandOppositePlayerSlice.reducer,
     playerPosition: playerPositionSlice.reducer,
+    oppositePlayerPosition: oppositePlayerPositionSlice.reducer,
     ballPosition: ballPositionSlice.reducer,
     goal: goalSlice.reducer,
     reset: resetSlice.reducer,
@@ -152,13 +147,13 @@ export const store = configureStore({
     reward : rewardSlice.reducer,
     start: startSlice.reducer,
     next: nextSlice.reducer,
-    gameState: stateSlice.reducer,
   },
 });
 
 
 // Export actions
-export const { addPlayer, updatePlayerPosition } = stateSlice.actions;
+export const { setOppositeCommand } = commandOppositePlayerSlice.actions;
+export const { setOppositePlayerPosition } = oppositePlayerPositionSlice.actions;
 export const { setNext } = nextSlice.actions;
 export const { setStart } = startSlice.actions;
 export const { setGoal } = goalSlice.actions;
