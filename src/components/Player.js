@@ -159,8 +159,6 @@ const Player = ( {position}) => {
     });
     useEffect(() => {
         if (isGoal && playerRef.current) {
-            // Set the ball to the starting position
-            console.log(position);
             playerRef.current.setTranslation({ x: position[0], y: position[1], z: position[2] }, true);
             playerRef.current.setLinvel({ x: 0, y: 0, z: 0 }, true);
             playerRef.current.setAngvel({ x: 0, y: 0, z: 0 }, true); 
