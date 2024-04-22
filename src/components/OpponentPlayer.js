@@ -1,18 +1,18 @@
-import React, { useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import { Box } from "@react-three/drei";
 import { RigidBody } from "@react-three/rapier";
 import { calculateMovementImpulse } from '../utils/physics';
 import { useFrame, useThree } from '@react-three/fiber';
 import { useDispatch, useSelector } from 'react-redux';
 import { ShotVector } from '../utils/playerLim';
-import { setCommand, setPlayerPosition } from '../store';
+import { setOppositeCommand, setOppositePlayerPosition } from '../store';
 
 import * as THREE from 'three';
 
-const Player = ( {position}) => {
+const OpponentPlayer = ( {position}) => {
     const dispatch = useDispatch();
-    const command = useSelector((state) => state.command);
-    const playerPosition = useSelector(state => state.playerPosition);
+    const command = useSelector((state) => state.commandOppositePlayer);
+    const playerPosition = useSelector(state => state.oppositePlayerPosition);
     const ballPosition = useSelector(state => state.ballPosition);
     const playerRef = useRef();
     const isGoal = useSelector(state => state.goal.intersecting);
@@ -103,15 +103,16 @@ const Player = ( {position}) => {
                 playerRef.current.setAngvel(rotationvec, true);
             }
         } else {
-            
+
         }
-        dispatch(setCommand(''));
+        dispatch(setOppositeCommand(''));
     };
     executeCommand(command);
 
     useThree((state) => {
 
         if (playerRef.current) {
+
             const middle = new THREE.Vector3(0,0,0);
 
             state.camera.lookAt(middle);
@@ -129,7 +130,7 @@ const Player = ( {position}) => {
         if (playerRef.current) {
             try {
                 const { x, y, z } = playerRef.current.translation();
-                dispatch(setPlayerPosition({ x, y, z }));
+                dispatch(setOppositePlayerPosition({ x, y, z }));
             } catch (error) {
                 console.log("Error while sending ball position:", error);
             }
@@ -144,9 +145,9 @@ const Player = ( {position}) => {
     }, [isGoal, position]);
 
     return (
-        <RigidBody position={position} name="player" ref={playerRef} lockRotations={true}>
+        <RigidBody position={position} name="oppositePlayer" ref={playerRef} lockRotations={true}>
             <Box args={[1, 1, 1]}>
-                <meshBasicMaterial color="lightblue"/>
+                <meshBasicMaterial color="red"/>
             </Box>
             <Box args={[0.25, 0.25, 0.5]} position={[0.375, 0.5, 0]}>
                 <meshBasicMaterial color={"blue"}/>
@@ -155,4 +156,4 @@ const Player = ( {position}) => {
     );
 };
 
-export default Player;
+export default OpponentPlayer;

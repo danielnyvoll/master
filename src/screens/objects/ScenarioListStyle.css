@@ -1,77 +1,75 @@
 .scenario-list {
-    background: #D9F2EF;
-    padding: 10px;
-    border-radius: 30px;
-    width: auto;
-    margin-left: 2%;
-    margin-top: 1%;
-    margin-bottom: 2%;
-  }
-  
-  .scenario-list label {
-    display: block;
-    font-weight: bold;
-    color: black;
-    margin-bottom: 10px;
-    margin-left: 2%;
-  }
-  
-  .scenario-list ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    margin-left: 2%;
-  }
-  
-  .scenario-list li {
-    margin-bottom: 5px;
-  }
-  
-  .scenario-list input[type="text"] {
-    border: none;
-    padding: 5px;
-    border-radius: 5px;
-    width: calc(100% - 30px); /* Adjust width as necessary */
-  }
-  
-  .scenario-list button {
-    padding: 1px 5px;
-    margin-left: 40%;
-    border: none;
-    background: #007256;
-    color: white;
-    border-radius: 50px;
-    cursor: pointer;
-  }
+  background: #D9F2EF;
+  padding: 10px;
+  border-radius: 30px;
+  width: auto;
+  margin-left: 2%;
+  margin-top: 1%;
+  margin-bottom: 2%;
+}
 
-  /* ScenarioListStyle.css */
+.scenario-list label {
+  display: block;
+  font-weight: bold;
+  color: black;
+  margin-bottom: 10px;
+  margin-left: 2%;
+}
+
+.scenario-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  margin-left: 2%;
+}
+
+.scenario-list li {
+  margin-bottom: 5px;
+}
+
+.scenario-list input[type="text"] {
+  border: none;
+  padding: 5px;
+  border-radius: 5px;
+  width: calc(100% - 30px); /* Adjust width as necessary */
+}
+
+.scenario-list button {
+  padding: 1px 5px;
+  margin-left: 40%;
+  border: none;
+  background: #007256;
+  color: white;
+  border-radius: 50px;
+  cursor: pointer;
+}
+
 
 .selected {
-    box-shadow: 0 0 10px rgba(0,0,0,0.5); /* Adjust shadow to your liking */
-    border-radius: 5px; /* Optional, for rounded corners */
-  }
-  
-  .input-wrapper {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-  }
-  
-  .edit-icon {
-    cursor: pointer;
-    user-select: none; /* Prevents text selection */
-  }
-  
-  /* Ensure your .scenario-list, ul, and li are styled to handle the layout properly */
-  li {
-    list-style-type: none; /* Removes bullet points from list items */
-  }
-  .cursor-text {
-    cursor: text;
-  }
-  
-  .cursor-default {
-    cursor: default;
-  }
-  
+  box-shadow: 0 0 10px rgba(0,0,0,0.5); /* Adjust shadow to your liking */
+  border-radius: 5px; /* Optional, for rounded corners */
+}
+
+.input-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.edit-icon {
+  cursor: pointer;
+  user-select: none; /* Prevents text selection */
+}
+
+/* Ensure your .scenario-list, ul, and li are styled to handle the layout properly */
+li {
+  list-style-type: none; /* Removes bullet points from list items */
+}
+.cursor-text {
+  cursor: text;
+}
+
+.cursor-default {
+  cursor: default;
+}

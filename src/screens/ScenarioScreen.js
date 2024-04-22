@@ -39,7 +39,6 @@ function ScenarioScreen() {
       const { color, id } = attributes[type];
       const newObject = { type, id, position: newPosition, color };
 
-      // Assuming you have an action to add or update objects in the scenario
       const updatedObjects = [...scenarios[currentScenarioIndex].objects, newObject];
       dispatch(updateScenarioObjects({ scenarioIndex: currentScenarioIndex, objects: updatedObjects }));
     }
@@ -110,9 +109,6 @@ function ScenarioScreen() {
 }
 
 export default ScenarioScreen;
-
-
-const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0) 
 
 const Node = ({ uid, x, y, z, color }) => {
   // Initialize the ref at the top before any usage

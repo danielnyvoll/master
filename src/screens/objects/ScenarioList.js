@@ -9,11 +9,8 @@ const ScenarioList = ({ onScenarioSelect }) => {
   const [newScenario, setNewScenario] = useState('');
   const [selectedScenarioIndex, setSelectedScenarioIndex] = useState(null);
   const [showEditIcon, setShowEditIcon] = useState(false);
-  const inputRefs = useRef([]);
-
-  useEffect(() => {
-    inputRefs.current = scenarios.map((_, i) => inputRefs.current[i] ?? React.createRef());
-  }, [scenarios]);
+  const inputRefs = useRef(new Array(scenarios.length));
+  const listRef = useRef(null);
 
   const handleNewScenarioChange = (event) => {
     setNewScenario(event.target.value);
@@ -28,26 +25,46 @@ const ScenarioList = ({ onScenarioSelect }) => {
 
   const handleSelectScenario = (index) => {
     dispatch(setCurrentScenarioIndex(index));
-    onScenarioSelect(index); // This callback is used to inform ScenarioScreen
-    setSelectedScenarioIndex(null); // Reset editing state
-    setShowEditIcon(false); // Hide edit icon
+    onScenarioSelect(index);
+    setShowEditIcon(false); // Reset edit icon visibility
   };
 
   const handleToggleEditIcon = (e, index) => {
-    e.stopPropagation(); // Prevent li click event from firing
-    setShowEditIcon(selectedScenarioIndex !== index || !showEditIcon);
-    setSelectedScenarioIndex(index);
+    e.stopPropagation(); // Prevent click from bubbling to the li element
+    const isCurrentlyShown = selectedScenarioIndex === index && showEditIcon;
+    setShowEditIcon(!isCurrentlyShown);
+
+    if (!isCurrentlyShown) {
+      setSelectedScenarioIndex(index);
+    } else {
+      setSelectedScenarioIndex(null);
+    }
   };
 
   const updateScenario = (index, newName) => {
-    const updatedScenarios = scenarios.map((scenario, sIndex) => 
+    const updatedScenarios = scenarios.map((scenario, sIndex) =>
       sIndex === index ? { ...scenario, name: newName } : scenario
     );
-    dispatch(updateScenarioObjects({scenarioIndex: index, objects: updatedScenarios[index].objects}));
+    dispatch(updateScenarioObjects({ scenarioIndex: index, objects: updatedScenarios[index].objects }));
   };
 
+  const handleClickOutside = (event) => {
+    if (listRef.current && !listRef.current.contains(event.target)) {
+      setShowEditIcon(false);
+      // Do not reset the selected scenario index here
+      // setSelectedScenarioIndex(null);
+    }
+  };
+
+  useEffect(() => {
+    // Attach the listener to the window on mount
+    window.addEventListener("mousedown", handleClickOutside);
+    // Remove the listener on cleanup
+    return () => window.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   return (
-    <div className="scenario-list">
+    <div className="scenario-list" ref={listRef}>
       <label>Select scenario:</label>
       <ul>
         {scenarios.map((scenario, index) => (
@@ -58,18 +75,19 @@ const ScenarioList = ({ onScenarioSelect }) => {
           >
             <div className="input-wrapper">
               <input
-                ref={inputRefs.current[index]}
+                ref={(el) => inputRefs.current[index] = el}
                 type="text"
-                value={selectedScenarioIndex === index ? scenario.name : scenario.name}
+                value={scenario.name}
                 onChange={(e) => updateScenario(index, e.target.value)}
                 readOnly={selectedScenarioIndex !== index || !showEditIcon}
                 style={{ cursor: selectedScenarioIndex === index && showEditIcon ? 'text' : 'default' }}
               />
-              <span
-                className="edit-icon"
-                onClick={(e) => handleToggleEditIcon(e, index)}
-                style={{ visibility: selectedScenarioIndex === index ? 'visible' : 'hidden' }}
-              >✏️</span>
+              {selectedScenarioIndex === index && (
+                <span
+                  className="edit-icon"
+                  onClick={(e) => handleToggleEditIcon(e, index)}
+                >✏️</span>
+              )}
             </div>
           </li>
         ))}

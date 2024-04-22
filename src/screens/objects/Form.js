@@ -1,20 +1,24 @@
 import React, { useState } from 'react';
 import infoIcon from '../../resources/Info.png'; 
 import './FormStyle.css'; 
+import { useDispatch, useSelector } from 'react-redux';
+
+import { setModel } from '../../store';
 
 function Form() {
+  const dispatch = useDispatch();
   // State hooks to store the values of the inputs
   const [episodes, setEpisodes] = useState('');
   const [goalScores, setGoalScores] = useState('');
   const [runTime, setRunTime] = useState('');
-  const [model, setModel] = useState('q-learning');
   const [showInfoText, setShowInfoText] = useState(false);
-
+  const model = useSelector(state => state.model);
+  
   // Handlers to update the state values
   const handleEpisodesChange = (e) => setEpisodes(e.target.value);
   const handleGoalScoresChange = (e) => setGoalScores(e.target.value);
   const handleRunTimeChange = (e) => setRunTime(e.target.value);
-  const handleModelChange = (e) => setModel(e.target.value);
+  const handleModelChange = (e) => dispatch(setModel(e.target.value));
 
   const handleInfoClick = () => {
     setShowInfoText(!showInfoText);

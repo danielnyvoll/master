@@ -13,7 +13,7 @@ import { setGoal } from '../store';
 
 const material = new MeshPhysicalMaterial();
 
-const Goal = ({ position, rotation }) => {
+const Goal = ({ position, rotation, isBlue }) => {
   const dispatch = useDispatch();
   const intersecting = useSelector(state => state.goal.intersecting);
   return (
@@ -41,8 +41,13 @@ const Goal = ({ position, rotation }) => {
       
 
       <Suspense fallback={null}>
-        {intersecting && (
+        {intersecting && isBlue && (
           <Text color="red" position={[0, 5, 0]} fontSize={2}>
+            Goal
+          </Text>
+        )}
+        {intersecting && !isBlue && (
+          <Text color="blue" position={[0, 5, 0]} fontSize={2}>
             Goal
           </Text>
         )}
@@ -59,12 +64,19 @@ const Goal = ({ position, rotation }) => {
         sensor
         onIntersectionEnter={({other}) => {
           if(other.rigidBodyObject.name === "ball"){
-            dispatch(setGoal(true));
+            if(isBlue){
+              dispatch(setGoal({intersecting: true, scoringSide: -1}));
+            }
+            else{
+              dispatch(setGoal({intersecting: true, scoringSide: 1}));
+
+            }
+            
           }  
         }}
         onIntersectionExit={() => {
           setTimeout(() => {
-            dispatch(setGoal(false));
+            dispatch(setGoal({intersecting: false, scoringSide: 0}));
           }, 1000);
         }}
       />

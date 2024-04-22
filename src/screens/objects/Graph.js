@@ -1,62 +1,55 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Line } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
-
-// Register the chart components
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
+import { useSelector } from 'react-redux';
 
 const LiveLineGraph = () => {
-  // Initial state for the chart data
+  const rewards = useSelector(state => state.reward);
+  const episodeRef = useRef(0);  // Using useRef to track the episode count
+
   const [chartData, setChartData] = useState({
-    labels: Array.from({length: 500}, (_, i) => i + 1), // Generate labels from 1 to 500
+    labels: [],
     datasets: [
       {
-        label: 'Reward',
+        label: 'Blue Player Reward per Episode',
+        data: [],
+        borderColor: 'rgb(53, 162, 235)',
+        backgroundColor: 'rgba(53, 162, 235, 0.5)',
+      },
+      {
+        label: 'Red Player Reward per Episode',
         data: [],
         borderColor: 'rgb(255, 99, 132)',
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
       },
       {
-        label: 'Goals Scored',
+        label: 'Total Reward',
         data: [],
-        borderColor: 'rgb(53, 162, 235)',
-        backgroundColor: 'rgba(53, 162, 235, 0.5)',
+        borderColor: 'rgb(75, 192, 192)',
+        backgroundColor: 'rgba(75, 192, 192, 0.5)',
       },
     ],
   });
 
-  // Function to add data to the graph
-  const addData = (episode, reward, goalScored) => {
-    setChartData((prevData) => {
-      const dataCopy = { ...prevData };
-      if (dataCopy.datasets[0].data.length < 500) { // Ensure we're not adding beyond 500 episodes
-        dataCopy.datasets[0].data[episode - 1] = reward;
-        dataCopy.datasets[1].data[episode - 1] = goalScored;
-      }
-      return dataCopy;
-    });
-  };
-
-  // Simulate adding data every 2 seconds for demonstration
   useEffect(() => {
-    const interval = setInterval(() => {
-      const episode = chartData.datasets[0].data.length + 1;
-      const reward = Math.floor(Math.random() * 100);
-      const goalScored = Math.floor(Math.random() * 100);
-      if (episode <= 500) {
-        addData(episode, reward, goalScored);
-      }
-    }, 2000);
-    return () => clearInterval(interval);
-  }, [chartData]);
+    // Increment the episode count only when rewards update
+    episodeRef.current += 1;
+
+    setChartData(prevData => {
+      const newLabels = [...prevData.labels, `Episode ${episodeRef.current}`];
+      const newDatasets = prevData.datasets.map(dataset => {
+        if (dataset.label === 'Blue Player Reward per Episode') {
+          return { ...dataset, data: [...dataset.data, rewards.blue] };
+        } else if (dataset.label === 'Red Player Reward per Episode') {
+          return { ...dataset, data: [...dataset.data, rewards.red] };
+        } else if (dataset.label === 'Total Reward') {
+          return { ...dataset, data: [...dataset.data, rewards.blue + rewards.red] };
+        }
+        return dataset;
+      });
+
+      return { labels: newLabels, datasets: newDatasets };
+    });
+  }, [rewards]);  // Only trigger the effect when `rewards` changes
 
   return <Line data={chartData} />;
 };
