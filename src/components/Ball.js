@@ -29,7 +29,7 @@ const Ball = ({ position }) => {
             ballRef.current.setLinvel({ x: 0, y: 0, z: 0 }, true);
             ballRef.current.setAngvel({ x: 0, y: 0, z: 0 }, true); 
         }
-    }, [isGoal]);
+    }, [isGoal, position]);
 
     const kick = (shootertrans) => {
 

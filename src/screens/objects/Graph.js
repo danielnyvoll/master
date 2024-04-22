@@ -1,21 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Line } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 import { useSelector } from 'react-redux';
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
 
 const LiveLineGraph = () => {
   const rewards = useSelector(state => state.reward);
-  const [episode, setEpisode] = useState(0);
+  const episodeRef = useRef(0);  // Using useRef to track the episode count
 
   const [chartData, setChartData] = useState({
     labels: [],
@@ -42,10 +31,11 @@ const LiveLineGraph = () => {
   });
 
   useEffect(() => {
-    setEpisode(prevEpisode => prevEpisode + 1);
+    // Increment the episode count only when rewards update
+    episodeRef.current += 1;
 
     setChartData(prevData => {
-      const newLabels = [...prevData.labels, `Episode ${episode + 1}`];
+      const newLabels = [...prevData.labels, `Episode ${episodeRef.current}`];
       const newDatasets = prevData.datasets.map(dataset => {
         if (dataset.label === 'Blue Player Reward per Episode') {
           return { ...dataset, data: [...dataset.data, rewards.blue] };
@@ -59,7 +49,7 @@ const LiveLineGraph = () => {
 
       return { labels: newLabels, datasets: newDatasets };
     });
-  }, [rewards]);
+  }, [rewards]);  // Only trigger the effect when `rewards` changes
 
   return <Line data={chartData} />;
 };
