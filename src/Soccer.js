@@ -1,6 +1,5 @@
-import React, { Suspense, useEffect } from 'react';
+import React, { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
 import { Physics } from '@react-three/rapier';
 import { useSelector, useDispatch } from 'react-redux';
 import Player from './components/Player';

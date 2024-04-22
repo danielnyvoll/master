@@ -5,7 +5,6 @@ import LiveLineGraph from "./objects/Graph"; // Ensure this import path matches 
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { setModel, setStart } from '../store'; // Adjust according to your actual file structure
-import infoIcon from '../resources/Info.png'; // Verify the path is correct
 
 function TrainingScreen() {
     const dispatch = useDispatch();

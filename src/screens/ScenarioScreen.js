@@ -110,9 +110,6 @@ function ScenarioScreen() {
 
 export default ScenarioScreen;
 
-
-const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0) 
-
 const Node = ({ uid, x, y, z, color }) => {
   // Initialize the ref at the top before any usage
   const ref = useRef();

@@ -7,7 +7,6 @@ const wsUrl = 'http://127.0.0.1:5000';
 export const useWebSocket = () => {
     const dispatch = useDispatch();
     const socket = useRef(null);
-    const start = useSelector(state => state.start); 
     const playerPosition = useSelector(state => state.playerPosition);
     const oppositePlayerPosition = useSelector(state => state.oppositePlayerPosition);
     const ballPosition = useSelector(state => state.ballPosition);
@@ -41,7 +40,6 @@ export const useWebSocket = () => {
     }, [dispatch]); 
   
     const sendCanvasImage = useCallback((imageBase64) => {
-        console.log(isGoal);
             socket.current.emit('send_image', {
                 image: imageBase64,
                 playerPosition: playerPosition,
@@ -50,7 +48,7 @@ export const useWebSocket = () => {
                 isGoal: isGoal,
                 isMultiplayer: isMultiplayer,
             });
-    }, [playerPosition, oppositePlayerPosition, ballPosition, isGoal]);
+    }, [playerPosition, oppositePlayerPosition, ballPosition, isGoal, isMultiplayer]);
 
     return { sendCanvasImage };
 };

@@ -12,12 +12,12 @@ export const vision = (ballpos, playerpos, visionrange = 20) => {
         distance = -1;
     }
 
-    return { direction, distance };
+    return { direction };
 }
 
 export const ShotVector = (playerpos, ballpos, param) => {
 
-    let { direction, _ } = vision(playerpos,ballpos, 2);
+    let { direction } = vision(playerpos,ballpos, 2);
 
     return direction.multiplyScalar(param);
 }

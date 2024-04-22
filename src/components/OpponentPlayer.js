@@ -1,6 +1,6 @@
-import React, { useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import { Box } from "@react-three/drei";
-import { CuboidCollider, RigidBody } from "@react-three/rapier";
+import { RigidBody } from "@react-three/rapier";
 import { calculateMovementImpulse } from '../utils/physics';
 import { useFrame, useThree } from '@react-three/fiber';
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,7 +18,7 @@ const OpponentPlayer = ( {position}) => {
     const isGoal = useSelector(state => state.goal.intersecting);
 
     const executeCommand = (cmd) => {
-        if (typeof cmd === 'string' && playerRef.current && cmd != '') {
+        if (typeof cmd === 'string' && playerRef.current && cmd !== '') {
             let move = { move: false, forward: false };
             let turn = { turn : false, left: false, right: false};
             let actions = { action: false, shoot: false, dribble: false };
@@ -63,8 +63,13 @@ const OpponentPlayer = ( {position}) => {
                 switch (actions) {
                     case actions.shoot:
                         param = 100;
+                        break;
                     case actions.dribble:
                         param = 1;
+                        break;
+                    default:
+                        param = 0;
+                        return;
                 }
 
                 let impulse = ShotVector(playerPosition, ballPosition, param);
@@ -74,17 +79,9 @@ const OpponentPlayer = ( {position}) => {
 
                 playerRef.current.setAngvel({x: 0, y: 0, z:0}, true);
 
-                const { x, y, z } = playerRef.current.translation();
-
                 const rotationQuaternion = new THREE.Quaternion(playerRef.current.rotation().x, playerRef.current.rotation().y, playerRef.current.rotation().z, playerRef.current.rotation().w);
 
                 const forwardVector = new THREE.Vector3(1, 0, 0).applyQuaternion(rotationQuaternion);
-
-                //const camerapos = new THREE.Vector3(x, y, z);
-
-                //const forwardVector = camerapos.add(new THREE.Vector3(1, 0, 0));
-                
-                //const rotatedDirection = forwardVector.clone().applyQuaternion(rotationQuaternion);
 
                 let movementVec = new THREE.Vector3(forwardVector.x, 0, forwardVector.z);
 
@@ -115,28 +112,10 @@ const OpponentPlayer = ( {position}) => {
     useThree((state) => {
 
         if (playerRef.current) {
-            const { x, y, z } = playerRef.current.translation();
-
-            const rotationQuaternion = new THREE.Quaternion(playerRef.current.rotation().x, playerRef.current.rotation().y, playerRef.current.rotation().z, playerRef.current.rotation().w);
-
-            const camerapos = new THREE.Vector3(x, y + 1, z);
-
-            const forwardVector = new THREE.Vector3(1, 0, 0).applyQuaternion(rotationQuaternion);
-
-
-            //const forwardVector = camerapos.add(new THREE.Vector3(1, 0, 0));
-
-            //const rotatedDirection = forwardVector.clone().applyQuaternion(rotationQuaternion);
-
-            const rotatedDirection = camerapos.add(forwardVector);
 
             const middle = new THREE.Vector3(0,0,0);
 
             state.camera.lookAt(middle);
-        
-            //state.camera.position.x = x;
-            //state.camera.position.y = y + 1.5;
-            //state.camera.position.z = z;
 
             state.camera.position.x = 0;
             state.camera.position.y = 50;
@@ -159,12 +138,11 @@ const OpponentPlayer = ( {position}) => {
     });
     useEffect(() => {
         if (isGoal && playerRef.current) {
-            // Set the ball to the starting position
             playerRef.current.setTranslation({ x: position[0], y: position[1], z: position[2] }, true);
             playerRef.current.setLinvel({ x: 0, y: 0, z: 0 }, true);
             playerRef.current.setAngvel({ x: 0, y: 0, z: 0 }, true); 
         }
-    }, [isGoal]);
+    }, [isGoal, position]);
 
     return (
         <RigidBody position={position} name="oppositePlayer" ref={playerRef} lockRotations={true}>

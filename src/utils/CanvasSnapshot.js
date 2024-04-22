@@ -1,4 +1,4 @@
-import React, { useRef, useCallback } from 'react';
+import { useRef, useCallback } from 'react';
 import { useThree, useFrame } from '@react-three/fiber';
 import { useWebSocket } from '../socket/WebSocket';
 
@@ -6,7 +6,6 @@ const CanvasSnapshot = () => {
     const { gl } = useThree(); // Access the WebGLRenderer
     const { sendCanvasImage } = useWebSocket();
     const snapshotTimer = useRef(0); // Use a ref to track time since last snapshot
-    const snapshotInterval = 1000; // Time in milliseconds between snapshots
 
     const sendSnapshot = useCallback(() => {
         gl.domElement.toBlob((blob) => {
