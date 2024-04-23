@@ -30,3 +30,20 @@ It correctly bundles React in production mode and optimizes the build for the be
 
 The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
+
+# Docker Set-Up
+You can use Docker to simplify setup and maintain consistent environments for both development and production. If you have Docker installed, you can start the entire application with a few commands.
+
+### Running the Application with Docker
+
+1. Ensure Docker is installed on your system. If not, you can download and install Docker from [Docker's official website](https://www.docker.com/get-started).
+2. Download only the docker-compose.yml file to your computer.
+3. Navigate to the directory containing the docker-compose.yml file.
+4. Run the following command to start all services defined in the Docker Compose file:
+
+###  `docker-compose up`
+
+Access the application on:
+
+- [App](https://localhost:3000)
+
