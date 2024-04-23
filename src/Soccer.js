@@ -27,7 +27,7 @@ const Soccer = () => {
             <ambientLight intensity={0.5} />
             <directionalLight position={[-10, 10, 0]} intensity={0.4} />
             <Suspense fallback={null}>
-                <Physics debug>
+                <Physics>
                     {currentScenario.objects.map((object, index) => {
                         const positionWithAdjustedY = [object.position[0], object.position[1] + 0.1, object.position[2]];
                         if (object.type === 'Player') {
