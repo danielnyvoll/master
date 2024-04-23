@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  frontend:
+    image: danielnyvoll/master-front:tagname
+    ports:
+      - "3000:3000"
+
+  backend:
+    image: danielnyvoll/master:latest
+    ports:
+      - "5000:5000"
