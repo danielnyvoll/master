@@ -61,7 +61,6 @@ function TrainingScreen() {
     };
     
     const handleDownloadModel = async () => {
-        // List of model names to download
         const modelNames = ['dqn_model_red.keras', 'dqn_model.keras'];
     
         for (let modelName of modelNames) {
