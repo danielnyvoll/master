@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   frontend:
-    image: danielnyvoll/react-frontend:newest
+    image: danielnyvoll/react-frontend:latest
     ports:
       - "3000:3000"
 
