@@ -3,6 +3,8 @@ import "./TrainingScreen.css"; // Make sure this path is correct
 import Soccer from "../Soccer";
 import LiveLineGraph from "./objects/Graph"; // Ensure this import path matches your project structure
 import axios from 'axios';
+import UploadIcon from '../resources/upload.png';
+import DownloadIcon from '../resources/download.png';
 import { useSelector, useDispatch } from 'react-redux';
 import { setModel, setStart } from '../store'; // Adjust according to your actual file structure
 function TrainingScreen() {
@@ -88,15 +90,20 @@ function TrainingScreen() {
                 <div className="left-container">
                     <div className="info-container">
                         <div className="info-component">
-                       
-                        <button className="button" onClick={() => fileInputRef.current.click()}>Upload Model</button>
-                        <button className="button" onClick={() => handleDownloadModel('model_name.keras')}>Download Model</button> <input
-                        type="file"
-                        onChange={handleUploadModel}
-                        style={{ display: 'none' }} // Hide the file input element
-                        ref={fileInputRef} // Assign the ref to the file input
-                    />
-                        <h3 className="model-selection-heading">Choose Training or Match:</h3>
+                            <div className='button-container'>
+                            <button className="button" onClick={() => fileInputRef.current.click()}>
+                                <img src={UploadIcon} alt="Upload" style={{ marginRight: 8 }} /> Upload Model
+                            </button>
+                            <button className="button" onClick={() => handleDownloadModel('model_name.keras')}>
+                                <img src={DownloadIcon} alt="Download" style={{ marginRight: 8 }} /> Download Model
+                            </button> 
+                            <input
+                                type="file"
+                                onChange={handleUploadModel}
+                                style={{ display: 'none' }} // Hide the file input element
+                                ref={fileInputRef} // Assign the ref to the file input
+                            /></div>
+                            <h3 className="model-selection-heading">Choose Training or Match:</h3>
                             <div className="model-selection">
                                 <label htmlFor="q-learning" className="model-label">
                                     <input

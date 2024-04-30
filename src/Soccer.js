@@ -31,15 +31,19 @@ const Soccer = () => {
                     {currentScenario.objects.map((object, index) => {
                         const positionWithAdjustedY = [object.position[0], object.position[1] + 0.1, object.position[2]];
                         if (object.type === 'Player') {
-                            playerCount++;
-                            if (playerCount % 2 === 1) {
-                                dispatch(setMultiplayer(false));
+                                playerCount++;
+                                if(playerCount > 1){
+                                    dispatch(setMultiplayer(true));
+                                }
                                 return <Player key={index} position={positionWithAdjustedY} />;
-                            } else {
-                                dispatch(setMultiplayer(true));
+                            } 
+                        else if (object.type === 'OpponentPlayer'){
+                                playerCount++;
+                                if(playerCount > 1){
+                                    dispatch(setMultiplayer(true));
+                                }
                                 return <OpponentPlayer key={index} position={positionWithAdjustedY} />;
                             }
-                        }
                          else if (object.type === 'Ball') {
                             return <Ball key={index} position={positionWithAdjustedY} />;
                         } else if (object.type === 'Cone') {

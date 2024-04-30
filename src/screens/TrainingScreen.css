@@ -1,163 +1,75 @@
 .button-container {
-    display: flex;
-    background-color: #0000; /* Transparent background to collapse any space between buttons */
-    margin-left: 2%;
-    margin-right: 2%;
-    margin-bottom: 1%;
+  display: flex;
+  justify-content: center; /* Center align buttons within the container */
+  margin: 10px 0; /* Space above and below the button container */
 }
-  
+
 .button {
-    margin-top: 20px;
-    border: none;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    transition-duration: 0.1s;
-    cursor: pointer;
-    outline: none;
-    flex: 1; /* This will make buttons expand equally to fill the parent container */
-    margin-right: 15px;
+  display: flex; /* Use flexbox to align icon and text */
+  align-items: center; /* Center align items vertically */
+  justify-content: center; /* Center align items horizontally */
+  margin: 0 10px; /* Space between buttons */
+  padding: 10px 20px;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Smooth transition for background color */
 }
-  
-/* Style for the red button */
+
+.button img {
+  width: 20px; /* Adjust icon size */
+  height: 20px; /* Adjust icon size */
+  margin-right: 8px; /* Space between the icon and the text */
+}
+
 .button.red {
-    background-color: #F4CECE;
-    color: white;
-    border-top-left-radius: 30px;
-    border-bottom-left-radius: 30px;
-    margin-right: -1px; /* Overlaps the border with the next button */
+  background-color: #F4CECE;
+  color: white;
+  border-radius: 10px; /* Rounded corners for the button */
 }
 
-.button.red:hover,
-.button-container.active { /* The button will also maintain the color on click */
-    background-color: #E57373; /* A more vivid red color on hover and click */
+.button.red:hover {
+  background-color: #E57373; /* Darker shade on hover */
 }
 
-/* Style for the green button */
 .button.green {
-    background-color: #B0E4DD;
-    color: white;
-    border-top-right-radius: 30px;
-    border-bottom-right-radius: 30px;
-    
+  background-color: #B0E4DD;
+  color: white;
+  border-radius: 10px; /* Rounded corners for the button */
 }
 
-.button.green:hover,
-.button.green.active { /* The button will also maintain the color on click */
-    background-color: #76D7C4; /* A more vivid green color on hover and click */
-}
-  
-/* Removes the outline on focus for both buttons */
-.button:focus {
-    outline: none;
+.button.green:hover {
+  background-color: #76D7C4; /* Darker shade on hover */
 }
 
-  
-  .model-selection {
-    display: flex;
-    align-items: center;
-  }
-  
-  .model-option {
-    display: flex;
-    align-items: center;
-    margin-right: 20%; 
-  }
-  
-  .hidden-radio {
-    display: none; 
-  }
-  .model-selection{
-    margin-left: 20%;
-  }
-  .model-label {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    position: relative;
-    white-space: nowrap;
-  }
-  .info-component {
-    display: flex;
-    flex-direction: column; /* Assuming you want to stack children vertically */
-    align-items: center; /* Centers children horizontally */
-    justify-content: center; /* Adjusts distribution of children if needed */
+.info-component {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%; /* Full width to center content */
 }
 
 .model-selection {
-    text-align: center; /* Center text within each label if needed */
-    font-size: 20px; /* Increases the font size for the text inside the model-selection */
-    margin: 0 auto; /* Center the div if flex properties don't apply as expected */
+  display: flex;
+  justify-content: center; /* Center the model options horizontally */
+  margin: 20px 0; /* Space above and below */
 }
 
 .model-label {
-    font-size: 20px; /* Increase the font size here if model-selection doesn't apply directly */
-    margin: 10px 0; /* Adjust margin for better spacing if needed */
+  margin: 0 10px; /* Space between model options */
+  cursor: pointer;
 }
 
-  
-  .checkmark {
-    color: green;
-    margin-left: 5px;
-    font-size: 1.2em;
-  }
-  
-  .hidden-radio:checked + .model-label {
-    color: green;
-    font-weight: bold;
-  }
-
-
-.info-icon {
-  width: 2%;
-  margin-left: 1%;
-  margin-bottom: 1%;
-  cursor: pointer; 
+.hidden-radio {
+  display: none; /* Hide the actual radio button */
 }
 
-.info-text {
-  display: inline-block;
-  position: absolute;
-  z-index: 1;
-  width: 200px;
-  background-color: #f9f9f9;
-  color: #333;
-  text-align: center;
-  border-radius: 4px;
-  padding: 2%;
-  margin-top: 1%; 
-  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2); 
-  visibility: hidden;
-  opacity: 0;
-  transition: opacity 0.3s, visibility 0.3s;
+.checkmark {
+  color: green;
+  margin-left: 5px;
 }
 
-.info-icon:hover + .info-text {
-  visibility: visible;
-  opacity: 1;
+.hidden-radio:checked + .model-label {
+  font-weight: bold; /* Bold the label of the selected option */
 }
-
-.training-screen .info-component .model-selection {
-    margin-bottom: 20px; /* Adjust spacing as needed */
-  }
-  
-  /* Additional styles omitted for brevity, assuming existing styles remain unchanged */
-  
-  .model-selection .model-label {
-    margin-right: 20px; /* Ensures spacing between the labels */
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-  }
-  
-  .hidden-radio {
-    display: none;
-  }
-  
-  .checkmark {
-    color: green;
-    margin-left: 5px;
-    font-size: 1.2em;
-  }

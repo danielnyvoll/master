@@ -22,7 +22,12 @@
   margin-top: 2%;
   
 }
-
+.info-icon {
+  width: 25px; /* Smaller size for the info icon */
+  height: 25px;
+  cursor: pointer; /* Indicates the icon is clickable */
+  margin-right: 5px; /* Space next to title or text */
+}
 .bottom-left-container-objects img {
   cursor: pointer;
   margin-top: 1%;

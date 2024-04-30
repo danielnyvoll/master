@@ -9,6 +9,7 @@ import ScenarioList from "./objects/ScenarioList";
 import PlayerIcon from "../resources/player.png";
 import BallIcon from "../resources/ball.png";
 import ConeIcon from "../resources/cone.png";
+import OpponentPlayerIcon from "../resources/opponentplayer.png";
 import { Graph, useNode } from "graphire";
 import useDragSnap from "../utils/useDrag";
 import * as THREE from 'three';
@@ -30,7 +31,8 @@ function ScenarioScreen() {
   const addObject = (type) => {
     const newPosition = [Math.random() * 5, 0.5, 0];
     const attributes = {
-      Player: { color: "#EF5B5B", id: Date.now() },
+      Player: { color: "#ADD8E6", id: Date.now() },
+      OpponentPlayer: { color: "red", id: Date.now() },
       Ball: { color: "white", id: Date.now() },
       Cone: { color: "black", id: Date.now() },
     };
@@ -63,15 +65,17 @@ function ScenarioScreen() {
             {showInfo && (
   <div className="info-box">
     <p><strong>Color Guide:</strong></p>
-    <p><span style={{color: "#EF5B5B"}}>Red</span> - Player</p>
+    <p><span style={{color: "#ADD8E6"}}>LightBlue</span> - Player</p>
+    <p><span style={{color: "#EF5B5B"}}>Red</span> - Opponent</p>
     <p><span style={{color: "white"}}>White</span> - Ball</p>
     <p><span style={{color: "black"}}>Black</span> - Cone</p>
   </div>
 )}
 
             <div className="bottom-left-container-objects">
-              
+            
             <img src={PlayerIcon} alt="Add Player" onClick={() => addObject('Player')} style={{ cursor: 'pointer', width: '50px', height: '50px' }} />
+            <img src={OpponentPlayerIcon} alt="Add OpponentPlayer" onClick={() => addObject('OpponentPlayer')} style={{ cursor: 'pointer', width: '50px', height: '50px' }} />
             <img src={ConeIcon} alt="Add Cone" onClick={() => addObject('Cone')} style={{ cursor: 'pointer', width: '50px', height: '50px' }} />
             <img src={BallIcon} alt="Add Ball" onClick={() => addObject('Ball')} style={{ cursor: 'pointer', width: '50px', height: '50px' }} />
             </div> </div>

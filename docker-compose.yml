@@ -2,11 +2,11 @@ version: '3.8'
 
 services:
   frontend:
-    image: danielnyvoll/master-front:tagname
+    image: danielnyvoll/react-frontend:newest
     ports:
       - "3000:3000"
 
   backend:
-    image: danielnyvoll/master:latest
+    image: danielnyvoll/master-backend:latest
     ports:
       - "5000:5000"
