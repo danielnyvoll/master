@@ -35,7 +35,7 @@ export const useWebSocket = () => {
       });
   
       return () => {
-          socket.current.disconnect();
+          
       };
     }, [dispatch]); 
   

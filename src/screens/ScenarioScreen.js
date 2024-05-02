@@ -28,7 +28,14 @@ function ScenarioScreen() {
   const handleScenarioSelection = (index) => {
     dispatch(setCurrentScenarioIndex(index));
   };
+
   const addObject = (type) => {
+    const existingObjects = scenarios[currentScenarioIndex]?.objects || [];
+
+    if (type === 'Player' && existingObjects.some(obj => obj.type === 'Player')) return;
+    if (type === 'OpponentPlayer' && existingObjects.some(obj => obj.type === 'OpponentPlayer')) return;
+    if (type === 'Ball' && existingObjects.some(obj => obj.type === 'Ball')) return;
+
     const newPosition = [Math.random() * 5, 0.5, 0];
     const attributes = {
       Player: { color: "#ADD8E6", id: Date.now() },
@@ -41,12 +48,12 @@ function ScenarioScreen() {
       const { color, id } = attributes[type];
       const newObject = { type, id, position: newPosition, color };
 
-      const updatedObjects = [...scenarios[currentScenarioIndex].objects, newObject];
+      const updatedObjects = [...existingObjects, newObject];
       dispatch(updateScenarioObjects({ scenarioIndex: currentScenarioIndex, objects: updatedObjects }));
     }
   };
-  const objects = scenarios[currentScenarioIndex]?.objects || [];
 
+  const objects = scenarios[currentScenarioIndex]?.objects || [];
 
   return (
     <div className="training-screen">
@@ -54,7 +61,7 @@ function ScenarioScreen() {
         <div className="select-container">
             <ScenarioList onScenarioSelect={handleScenarioSelection}></ScenarioList>
         </div>
-        <div className="title"> <span className="title-text">Set Up Your Own Scenario With These Objects:</span>
+        <div className="title"> <span className="title-text">Click on the objects to add them to the field:</span>
         <img 
     src={infoIcon} 
     alt="Info" 
@@ -84,7 +91,7 @@ function ScenarioScreen() {
 
         <div className="component-container">
           <div className="game-container">
-          <Canvas style={{ width: '50vw', height: '60vh'}}>
+          <Canvas style={{ width: '50vw', height: '60vh'}} camera={{ position: [10, 10, 0] }}>
           <ambientLight intensity={0.5} />
           <OrbitControls makeDefault enableDamping={false} />
             <Physics>
