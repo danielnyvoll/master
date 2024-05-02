@@ -40,12 +40,6 @@ const LiveLineGraph = () => {
         borderColor: 'rgb(255, 99, 132)',
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
       },
-      {
-        label: 'Total Reward',
-        data: [],
-        borderColor: 'rgb(75, 192, 192)',
-        backgroundColor: 'rgba(75, 192, 192, 0.5)',
-      },
     ],
   });
 
@@ -60,8 +54,6 @@ const LiveLineGraph = () => {
           return { ...dataset, data: [...dataset.data, rewards.blue] };
         } else if (dataset.label === 'Red Player Reward per Episode') {
           return { ...dataset, data: [...dataset.data, rewards.red] };
-        } else if (dataset.label === 'Total Reward') {
-          return { ...dataset, data: [...dataset.data, rewards.blue + rewards.red] };
         }
         return dataset;
       });
