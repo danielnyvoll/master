@@ -8,6 +8,8 @@ import DownloadIcon from '../resources/download.png';
 import { useSelector, useDispatch } from 'react-redux';
 import { setModel, setStart } from '../store'; // Adjust according to your actual file structure
 function TrainingScreen() {
+    const wsUrl = 'http://127.0.0.1:5000';
+    const backendUrl = process.env.REACT_APP_BACKEND_URL || wsUrl;
     const dispatch = useDispatch();
     const reset = useSelector((state) => state.reset); 
     const model = useSelector(state => state.model);
@@ -19,7 +21,7 @@ function TrainingScreen() {
 
     const handleStartModel = async () => {
         try {
-            const response = await axios.post('http://127.0.0.1:5000/start', { model }, {
+            const response = await axios.post(backendUrl + '/start', { model }, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -34,7 +36,7 @@ function TrainingScreen() {
     const handleStopModel = async () => {
         try {
             dispatch(setStart(false));
-            const response = await axios.post('http://127.0.0.1:5000/stop');
+            const response = await axios.post(backendUrl + '/stop');
             console.log(response.data.message);
         } catch (error) {
             console.error('Error stopping model:', error);
@@ -48,7 +50,7 @@ function TrainingScreen() {
             const formData = new FormData();
             formData.append('file', file);
             try {
-                const response = await axios.post('http://127.0.0.1:5000/upload', formData, {
+                const response = await axios.post(backendUrl + '/upload', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     }
@@ -67,7 +69,7 @@ function TrainingScreen() {
     
         for (let modelName of modelNames) {
             try {
-                const response = await axios.get(`http://127.0.0.1:5000/download?model_name=${modelName}`, {
+                const response = await axios.get(backendUrl + `/download?model_name=${modelName}`, {
                     responseType: 'blob',
                 });
                 const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -76,7 +78,7 @@ function TrainingScreen() {
                 link.setAttribute('download', modelName);
                 document.body.appendChild(link);
                 link.click();
-                window.URL.revokeObjectURL(url); // Clean up the URL object
+                window.URL.revokeObjectURL(url);
                 link.remove();
             } catch (error) {
                 console.error(`Error downloading model ${modelName}:`, error.response?.data?.message || error);
@@ -136,7 +138,6 @@ function TrainingScreen() {
                                 <button className="button red" onClick={handleStopModel}>Stop</button>
                                 <button className="button green" onClick={handleStartModel}>Go</button>
                             </div>
-                            <LiveLineGraph></LiveLineGraph>
                         </div>
                     </div>
                 </div>

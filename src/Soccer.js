@@ -6,8 +6,6 @@ import Player from './components/Player';
 import Ball from './components/Ball';
 import Field from './components/Field';
 import Goal from './components/Goal';
-import Cone from './components/Cone';
-import OpponentPlayer from './components/OpponentPlayer';
 import CanvasSnapshot from './utils/CanvasSnapshot';
 import { setMultiplayer } from './store';
 
@@ -16,8 +14,19 @@ const Soccer = () => {
     const scenarios = useSelector((state) => state.scenarios.list);
     const currentScenarioIndex = useSelector((state) => state.scenarios.currentScenarioIndex);
     const currentScenario = scenarios[currentScenarioIndex];
-    let playerCount = 0;  // Use `let` to modify within map
+    const fieldLength = 120;
+    const fieldWidth = 70;
 
+    // Function to generate random positions within the field bounds
+    const getRandomPosition = () => {
+        const x = Math.random() * (fieldLength - 4) - (fieldLength / 2 - 2); // Center the position and leave space for walls
+        const z = Math.random() * (fieldWidth - 4) - (fieldWidth / 2 - 2);
+        return [x, 1, z];
+    };
+
+    // Random positions for player and ball
+    const playerPosition = getRandomPosition();
+    const ballPosition = getRandomPosition();
 
     return (
         <Canvas
@@ -28,32 +37,10 @@ const Soccer = () => {
             <directionalLight position={[-10, 10, 0]} intensity={0.4} />
             <Suspense fallback={null}>
                 <Physics>
-                    {currentScenario.objects.map((object, index) => {
-                        const positionWithAdjustedY = [object.position[0], object.position[1] + 0.1, object.position[2]];
-                        if (object.type === 'Player') {
-                                playerCount++;
-                                if(playerCount > 1){
-                                    dispatch(setMultiplayer(true));
-                                }
-                                return <Player key={index} position={positionWithAdjustedY} />;
-                            } 
-                        else if (object.type === 'OpponentPlayer'){
-                                playerCount++;
-                                if(playerCount > 1){
-                                    dispatch(setMultiplayer(true));
-                                }
-                                return <OpponentPlayer key={index} position={positionWithAdjustedY} />;
-                            }
-                         else if (object.type === 'Ball') {
-                            return <Ball key={index} position={positionWithAdjustedY} />;
-                        } else if (object.type === 'Cone') {
-                            return <Cone key={index} position={positionWithAdjustedY} />;
-                        } else {
-                            return null;
-                        }
-                    })}
-                    <Goal rotation={[0, -Math.PI / 2, 0]} position={[-121 / 2, 2.44 / 2, 0]} isBlue={true}/>
-                    <Goal rotation={[0, Math.PI / 2, 0]} position={[121 / 2, 2.44 / 2, 0]} isBlue={false}/>
+                    <Player position={playerPosition} />
+                    <Ball position={ballPosition} />
+                    <Goal rotation={[0, -Math.PI / 2, 0]} position={[-121 / 2, 2.44 / 2, 0]} isBlue={true} />
+                    <Goal rotation={[0, Math.PI / 2, 0]} position={[121 / 2, 2.44 / 2, 0]} isBlue={false} />
                     <Field />
                 </Physics>
             </Suspense>

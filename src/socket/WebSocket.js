@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef } from 'react';
 import io from 'socket.io-client';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCommand, setOppositeCommand, setNext, setReset, setReward } from '../store';  // Ensure you have setOppositeCommand action
-const wsUrl = 'http://127.0.0.1:5000';
+
 
 export const useWebSocket = () => {
     const dispatch = useDispatch();
@@ -12,9 +12,10 @@ export const useWebSocket = () => {
     const ballPosition = useSelector(state => state.ballPosition);
     const isGoal = useSelector(state => state.goal);
     const isMultiplayer = useSelector(state => state.multiplayer);
-
+    const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://127.0.0.1:5000';
+    
     useEffect(() => {
-      socket.current = io(wsUrl, { transports: ['websocket'] });
+      socket.current = io(backendUrl, { transports: ['websocket'] });
       socket.current.on('command', (commands) => {
 
         dispatch(setCommand(commands.player));
