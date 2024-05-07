@@ -11,11 +11,14 @@ import { MeshPhysicalMaterial } from "three";
 import { useDispatch, useSelector } from 'react-redux';
 import { setGoal } from '../store';
 
-const material = new MeshPhysicalMaterial();
-
 const Goal = ({ position, rotation, isBlue }) => {
   const dispatch = useDispatch();
   const intersecting = useSelector(state => state.goal.intersecting);
+
+  // Set color based on isBlue
+  const materialColor = isBlue ? 'blue' : 'red';
+  const material = new MeshPhysicalMaterial({ color: materialColor });
+
   return (
     <RigidBody position={position} rotation={rotation} type='fixed'>
       <Box
@@ -37,9 +40,6 @@ const Goal = ({ position, rotation, isBlue }) => {
         castShadow
       />
 
-      
-      
-
       <Suspense fallback={null}>
         {intersecting && isBlue && (
           <Text color="red" position={[0, 5, 0]} fontSize={2}>
@@ -53,11 +53,6 @@ const Goal = ({ position, rotation, isBlue }) => {
         )}
       </Suspense>
 
-      {/**
-       * We create a collider and set it to be a 'sensor'
-       * This enables intersection events and enables
-       * colliders to pass through it.
-       */}
       <CuboidCollider
         position={[0, 0, -1]}
         args={[5, 3, 1]}
@@ -69,9 +64,7 @@ const Goal = ({ position, rotation, isBlue }) => {
             }
             else{
               dispatch(setGoal({intersecting: true, scoringSide: 1}));
-
             }
-            
           }  
         }}
         onIntersectionExit={() => {
