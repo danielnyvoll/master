@@ -96,11 +96,11 @@ const Player = ( {position}) => {
                 playerRef.current.applyImpulse(impulse, true);
             }
             else if (turn.turn) {
-                let rotationvec = {x: 0, y: 5, z: 0};
-                if (turn.right) {
-                    rotationvec = {x: 0, y: -5, z: 0};
-                }
-                playerRef.current.setAngvel(rotationvec, true);
+                const direction = turn.right ? 1 : -1;
+                const angleInRadians = (45 * Math.PI) / 180;
+                const currentRotation = playerRef.current.rotation();
+                const quaternion = new THREE.Quaternion().setFromEuler(new THREE.Euler(0, currentRotation.y + (direction * angleInRadians), 0));
+                playerRef.current.setRotation(quaternion);
             }
         } else {
             
