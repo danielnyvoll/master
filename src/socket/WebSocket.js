@@ -17,7 +17,7 @@ export const useWebSocket = () => {
     useEffect(() => {
       socket.current = io(backendUrl, { transports: ['websocket'] });
       socket.current.on('command', (commands) => {
-
+        console.log(commands);
         dispatch(setCommand(commands.player));
         dispatch(setOppositeCommand(commands.opponent));
       });

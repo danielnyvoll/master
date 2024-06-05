@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Line } from 'react-chartjs-2';
+import "./GraphStyle.css"; // Make sure this path is correct
+
 import { useSelector } from 'react-redux';
 import {
   Chart as ChartJS,
@@ -62,7 +64,7 @@ const LiveLineGraph = () => {
     });
   }, [rewards]);  // Only trigger the effect when `rewards` changes
 
-  return <Line data={chartData} />;
+  return <div className="graph-container"><Line data={chartData} /></div>;
 };
 
 export default LiveLineGraph;

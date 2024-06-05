@@ -73,3 +73,9 @@
 .hidden-radio:checked + .model-label {
   font-weight: bold; /* Bold the label of the selected option */
 }
+
+.graph-container {
+  width: 50%; /* Adjust the width as needed */
+  height: 30px; /* Adjust the height as needed */
+  margin: 0 auto; /* Center the container */
+}
