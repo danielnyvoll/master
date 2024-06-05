@@ -26,6 +26,7 @@ const ScenarioList = ({ onScenarioSelect }) => {
   const handleSelectScenario = (index) => {
     dispatch(setCurrentScenarioIndex(index));
     onScenarioSelect(index);
+    setSelectedScenarioIndex(index);
     setShowEditIcon(false); // Reset edit icon visibility
   };
 
@@ -51,8 +52,6 @@ const ScenarioList = ({ onScenarioSelect }) => {
   const handleClickOutside = (event) => {
     if (listRef.current && !listRef.current.contains(event.target)) {
       setShowEditIcon(false);
-      // Do not reset the selected scenario index here
-      // setSelectedScenarioIndex(null);
     }
   };
 
@@ -73,6 +72,7 @@ const ScenarioList = ({ onScenarioSelect }) => {
             className={selectedScenarioIndex === index ? "selected" : ""}
             onClick={() => handleSelectScenario(index)}
           >
+            {selectedScenarioIndex === index && <span className="selected-scenario-emoji">✅</span>}
             <div className="input-wrapper">
               <input
                 ref={(el) => inputRefs.current[index] = el}
