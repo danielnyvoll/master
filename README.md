@@ -8,6 +8,13 @@
 - [Figma](https://www.figma.com/file/ZOi8MBgfMXSiwwNbkNZnaW/Master-T%26D?type=design&node-id=0-1&mode=design&t=tigpCWxLccdWghwg-0)
 - [Discord](https://discord.com/channels/1174000158581739571/1174000158581739574)
 
+# Demo
+
+- [Demo Training Scenario Creation](https://youtu.be/rIPu9AElQ6Y)
+- [Demo Training Penalty and Match](https://youtu.be/dztjk8buJWY)
+
+# Running the Project
+
 In the project directory, you can run:
 
 ### `npm start`
